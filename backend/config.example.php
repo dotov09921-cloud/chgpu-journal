@@ -7,6 +7,11 @@ return [
     'max_upload_bytes'=>25*1024*1024,
     'session_name'=>'chgpu_editor_session'
   ],
+  'backup'=>[
+    'dir'=>__DIR__.'/storage/backups',
+    'retention_days'=>30,
+    'include_uploads'=>true
+  ],
   'mail'=>[
     'enabled'=>false,
     'from_email'=>'journal@example.ru',

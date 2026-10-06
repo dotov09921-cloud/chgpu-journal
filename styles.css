@@ -23,3 +23,5 @@
 @media(max-width:600px){.system-grid,.system-grid.metrics{grid-template-columns:1fr}}
 
 .hp-field{position:absolute!important;left:-10000px!important;top:auto!important;width:1px!important;height:1px!important;overflow:hidden!important;opacity:0!important;pointer-events:none!important}
+
+.session-box{margin:0 16px 18px;padding:14px;border:1px solid #343434;background:#1d1d1d}.session-name{font:13px Arial,sans-serif;color:#fff;margin-bottom:4px}.session-role{font:11px Arial,sans-serif;text-transform:uppercase;letter-spacing:.06em;color:#aaa;margin-bottom:10px}.session-logout{width:100%;border:1px solid #555;background:transparent;color:#ddd;padding:8px;font:11px Arial,sans-serif;cursor:pointer;text-align:left}.session-logout:hover{background:#2a2a2a;color:#fff}

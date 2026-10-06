@@ -19,9 +19,10 @@ try{
   $s->execute([$submissionId]);$sub=$s->fetch();
   if(!$sub)throw new RuntimeException('Рукопись не найдена');
 
-  $r=$pdo->prepare("SELECT id FROM users WHERE id=? AND role='reviewer' AND is_active=1 LIMIT 1");
+  $r=$pdo->prepare("SELECT id,email,full_name FROM users WHERE id=? AND role='reviewer' AND is_active=1 LIMIT 1");
   $r->execute([$reviewerId]);
-  if(!$r->fetch())throw new RuntimeException('Рецензент не найден');
+  $reviewer=$r->fetch();
+  if(!$reviewer)throw new RuntimeException('Рецензент не найден');
 
   $stmt=$pdo->prepare("INSERT INTO review_assignments (submission_id,reviewer_id,assigned_by_user_id,status,deadline,editor_note)
     VALUES (?,?,?,'assigned',?,?)
@@ -38,6 +39,17 @@ try{
   }
 
   $pdo->commit();
+
+  $s2=$pdo->prepare('SELECT public_id,title FROM submissions WHERE id=? LIMIT 1');
+  $s2->execute([$submissionId]);$mailSub=$s2->fetch();
+  if($mailSub){
+    $body='<p>Вам назначена рукопись <strong>'.mail_escape($mailSub['public_id']).'</strong>.</p><p><strong>'.mail_escape($mailSub['title']).'</strong></p>';
+    if($deadline!=='')$body.='<p>Срок рецензирования: <strong>'.mail_escape($deadline).'</strong>.</p>';
+    if($editorNote!=='')$body.='<p>Комментарий редакции: '.nl2br(mail_escape($editorNote)).'</p>';
+    $body.=mail_button(rtrim($config['app']['base_url'],'/').'/reviewer.html','Открыть кабинет рецензента');
+    send_notification($submissionId,'review_assigned_reviewer',$reviewer['email'],'Назначена рукопись '.$mailSub['public_id'],mail_layout('Новая рукопись на рецензирование',$body));
+  }
+
   json_response(['ok'=>true]);
 }catch(Throwable $e){
   if($pdo->inTransaction())$pdo->rollBack();

@@ -12,14 +12,13 @@
 <section><div id="issuesList"></div></section></div>
 </main></div></div></section>
 <script src="api.js"></script><script>
-const demoIssues=[{id:1,year:2026,series:'Серия 1. Гуманитарные и общественные науки',number:'№2 (54)',title:'',publication_date:'2026-07-01',is_published:1,article_count:5},{id:2,year:2026,series:'Серия 1. Гуманитарные и общественные науки',number:'№3 (55)',title:'',publication_date:null,is_published:0,article_count:0}];
+const demoIssues=[{id:1,year:2026,series:'Серия 1. Гуманитарные и общественные науки',number:'№2 (54)',publication_date:'2026-07-01',is_published:1,article_count:5},{id:2,year:2026,series:'Серия 1. Гуманитарные и общественные науки',number:'№3 (55)',publication_date:null,is_published:0,article_count:0}];
 async function loadIssues(){
  const box=document.getElementById('issuesList');
  let items;
  if(window.CHGPU_API.enabled){try{items=(await editorIssues()).items}catch(e){location.href='login.html';return}} else items=demoIssues;
- box.innerHTML=items.map(i=>'<article class="issue-admin-card"><div><div class="eyebrow">'+i.year+'</div><h3>'+i.number+'</h3><p>'+i.series+'</p><span class="note">'+i.article_count+' статей</span></div><div><span class="status-pill">'+(Number(i.is_published)?'Опубликован':'Черновик')+'</span><div style="margin-top:12px">'+(window.CHGPU_API.enabled?'<button class="btn ghost" onclick="toggleIssue('+i.id+','+(Number(i.is_published)?0:1)+')">'+(Number(i.is_published)?'Снять с публикации':'Опубликовать выпуск')+'</button>':'')+'</div></div></article>').join('');
+ box.innerHTML=items.map(i=>'<article class="issue-admin-card"><div><div class="eyebrow">'+i.year+'</div><h3>'+i.number+'</h3><p>'+i.series+'</p><span class="note">'+i.article_count+' статей</span></div><div><span class="status-pill">'+(Number(i.is_published)?'Опубликован':'Черновик')+'</span></div></article>').join('');
 }
-async function toggleIssue(id,v){await editorSetIssuePublished(id,!!v);await loadIssues();}
 document.getElementById('issueForm').addEventListener('submit',async e=>{
  e.preventDefault();const m=document.getElementById('issueMsg');
  if(!window.CHGPU_API.enabled){m.textContent='В демо-режиме выпуск не сохраняется на сервер.';return;}

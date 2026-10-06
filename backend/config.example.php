@@ -4,6 +4,7 @@ return [
   'app'=>[
     'base_url'=>'https://journal.example.ru',
     'upload_dir'=>__DIR__.'/storage/uploads',
+    'archive_dir'=>__DIR__.'/storage/archive',
     'max_upload_bytes'=>25*1024*1024,
     'session_name'=>'chgpu_editor_session'
   ],

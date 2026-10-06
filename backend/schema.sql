@@ -117,3 +117,18 @@ CREATE TABLE IF NOT EXISTS review_assignments (
   CONSTRAINT fk_review_reviewer FOREIGN KEY (reviewer_id) REFERENCES users(id) ON DELETE CASCADE,
   CONSTRAINT fk_review_assigner FOREIGN KEY (assigned_by_user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+CREATE TABLE IF NOT EXISTS notification_log (
+  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  submission_id BIGINT UNSIGNED NULL,
+  event_type VARCHAR(64) NOT NULL,
+  recipient VARCHAR(190) NOT NULL,
+  subject VARCHAR(500) NOT NULL,
+  status ENUM('sent','failed','disabled') NOT NULL,
+  error_text TEXT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_notification_submission (submission_id),
+  INDEX idx_notification_status (status),
+  CONSTRAINT fk_notification_submission FOREIGN KEY (submission_id) REFERENCES submissions(id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

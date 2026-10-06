@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded',async()=>{
        '<section class="system-section"><h3>Последняя резервная копия</h3>'+(b?'<pre>'+JSON.stringify(b,null,2)+'</pre>':'<div class="empty-state">Резервных копий пока нет.</div>')+'</section>'+
        '<section class="system-section"><h3>Последние системные ошибки</h3>'+(s.recent_errors.length?'<table class="table"><tbody>'+s.recent_errors.map(x=>'<tr><td>'+x.created_at+'</td><td>'+x.level+'</td><td>'+x.message+'</td><td>'+x.request_uri+'</td></tr>').join('')+'</tbody></table>':'<div class="empty-state">Ошибок нет.</div>')+'</section>'+
        '<section class="system-section"><h3>Ошибки отправки писем</h3>'+(s.recent_failed_mail.length?'<table class="table"><tbody>'+s.recent_failed_mail.map(x=>'<tr><td>'+x.created_at+'</td><td>'+x.recipient+'</td><td>'+x.subject+'</td><td>'+x.error_text+'</td></tr>').join('')+'</tbody></table>':'<div class="empty-state">Ошибок отправки нет.</div>')+'</section>';
-   }catch(e){location.href='login.html'}
+   }catch(e){if(chgpuHandleAccessError(e,document.body))return;throw e}
  }
 
  backupBtn.addEventListener('click',async()=>{msg.style.display='block';msg.textContent='Создание резервной копии…';try{const r=await adminBackupNow();msg.textContent='Backup создан: '+r.manifest.created_at;await load()}catch(e){msg.textContent=e.message}});

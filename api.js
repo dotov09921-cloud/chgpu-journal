@@ -115,3 +115,31 @@ async function reviewerSubmit(payload) {
     body:JSON.stringify(payload)
   });
 }
+
+async function adminUsers() {
+  return chgpuApi('/users.php');
+}
+async function adminInviteUser(payload) {
+  return chgpuApi('/users.php', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({action:'invite',...payload})
+  });
+}
+async function adminUpdateUser(payload) {
+  return chgpuApi('/users.php', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({action:'update',...payload})
+  });
+}
+async function adminAuditLog() {
+  return chgpuApi('/audit-log.php');
+}
+async function setInvitedPassword(email,token,password) {
+  return chgpuApi('/set-password.php', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({email,token,password})
+  });
+}

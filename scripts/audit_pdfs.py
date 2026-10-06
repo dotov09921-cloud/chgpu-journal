@@ -7,6 +7,7 @@ import subprocess
 import tempfile
 import urllib.request
 import urllib.error
+import urllib.parse
 from collections import defaultdict
 from pathlib import Path
 
@@ -39,7 +40,15 @@ for idx, (url, linked) in enumerate(groups.items(), 1):
     fd, tmp_name = tempfile.mkstemp(suffix=".pdf")
     os.close(fd)
     try:
-        req = urllib.request.Request(url, headers={"User-Agent": ua})
+        parts = urllib.parse.urlsplit(url)
+        safe_url = urllib.parse.urlunsplit((
+            parts.scheme,
+            parts.netloc.encode("idna").decode("ascii"),
+            urllib.parse.quote(urllib.parse.unquote(parts.path), safe="/%:@"),
+            urllib.parse.quote(urllib.parse.unquote(parts.query), safe="=&?/:@"),
+            ""
+        ))
+        req = urllib.request.Request(safe_url, headers={"User-Agent": ua})
         with urllib.request.urlopen(req, timeout=90) as resp, open(tmp_name, "wb") as out:
             http_status = getattr(resp, "status", 200)
             content_type = resp.headers.get("Content-Type", "")

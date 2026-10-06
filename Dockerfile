@@ -12,6 +12,7 @@ RUN apt-get update \
        msmtp-mta \
     && docker-php-ext-install pdo_mysql zip \
     && a2enmod rewrite headers expires \
+    && sed -ri 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf \
     && rm -rf /var/lib/apt/lists/*
 
 COPY docker/php-dev.ini /usr/local/etc/php/conf.d/zz-chgpu-dev.ini

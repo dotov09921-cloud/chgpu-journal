@@ -1,0 +1,9 @@
+.git
+.github
+backend/config.php
+backend/storage/uploads
+backend/storage/archive
+backend/storage/backups
+backend/storage/*.log
+*.log
+.DS_Store

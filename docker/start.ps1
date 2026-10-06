@@ -1,0 +1,11 @@
+$ErrorActionPreference = "Stop"
+Write-Host "Starting CHGPU Journal local environment..."
+docker compose up -d --build
+Write-Host ""
+Write-Host "Site:     http://localhost:8080"
+Write-Host "Login:    http://localhost:8080/login.html"
+Write-Host "Mailpit:  http://localhost:8025"
+Write-Host ""
+Write-Host "Admin:    admin@chgpu.local / TestAdmin2026!"
+Write-Host "Editor:   editor@chgpu.local / TestEditor2026!"
+Write-Host "Reviewer: reviewer@chgpu.local / TestReviewer2026!"

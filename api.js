@@ -190,3 +190,12 @@ async function adminBackupNow() {
 function adminExportUrl() {
   return window.CHGPU_API.base + '/export-data.php';
 }
+
+function chgpuEscape(value) {
+  return String(value ?? '').replace(/[&<>"']/g, ch => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'
+  })[ch]);
+}
+function chgpuNl2br(value) {
+  return chgpuEscape(value).replace(/\n/g,'<br>');
+}

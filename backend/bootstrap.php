@@ -86,3 +86,12 @@ function mail_button(string $url,string $label): string {
 function mail_layout(string $title,string $body): string {
   return '<!doctype html><html><body style="margin:0;background:#f3f1eb;font-family:Arial,sans-serif;color:#1a1a1a"><div style="max-width:680px;margin:0 auto;padding:28px"><div style="background:#fff;border:1px solid #d8d5cd;padding:28px"><div style="font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#666">Известия ЧГПУ</div><h2 style="font-family:Georgia,serif;font-weight:500">'.$title.'</h2>'.$body.'<hr style="border:0;border-top:1px solid #ddd;margin:28px 0"><p style="font-size:12px;color:#777">Это автоматическое уведомление редакционной системы.</p></div></div></body></html>';
 }
+
+
+function audit_event(?int $actorUserId,string $eventType,string $entityType,?int $entityId,array $details=[]): void {
+  try{
+    $ip=(string)($_SERVER['REMOTE_ADDR']??'');
+    $stmt=db()->prepare('INSERT INTO system_audit_log (actor_user_id,event_type,entity_type,entity_id,details_json,ip_address) VALUES (?,?,?,?,?,?)');
+    $stmt->execute([$actorUserId,$eventType,$entityType,$entityId,json_encode($details,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES),$ip?:null]);
+  }catch(Throwable $e){}
+}

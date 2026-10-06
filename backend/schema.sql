@@ -17,9 +17,7 @@ CREATE TABLE IF NOT EXISTS issues (
   publication_date DATE NULL,
   pdf_path VARCHAR(500) NULL,
   is_published TINYINT(1) NOT NULL DEFAULT 0,
-  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  INDEX idx_issues_year (year),
-  INDEX idx_issues_published (is_published)
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS submissions (
@@ -42,8 +40,6 @@ CREATE TABLE IF NOT EXISTS submissions (
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   INDEX idx_submissions_status (status),
-  INDEX idx_submissions_created (created_at),
-  INDEX idx_submissions_author_email (author_email),
   CONSTRAINT fk_submission_editor FOREIGN KEY (assigned_editor_id) REFERENCES users(id) ON DELETE SET NULL,
   CONSTRAINT fk_submission_issue FOREIGN KEY (issue_id) REFERENCES issues(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -61,7 +57,6 @@ CREATE TABLE IF NOT EXISTS submission_files (
   sha256 CHAR(64) NOT NULL,
   uploaded_by_user_id BIGINT UNSIGNED NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  INDEX idx_files_submission (submission_id),
   CONSTRAINT fk_files_submission FOREIGN KEY (submission_id) REFERENCES submissions(id) ON DELETE CASCADE,
   CONSTRAINT fk_files_user FOREIGN KEY (uploaded_by_user_id) REFERENCES users(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -76,7 +71,6 @@ CREATE TABLE IF NOT EXISTS submission_history (
   comment TEXT NULL,
   is_visible_to_author TINYINT(1) NOT NULL DEFAULT 1,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  INDEX idx_history_submission (submission_id),
   CONSTRAINT fk_history_submission FOREIGN KEY (submission_id) REFERENCES submissions(id) ON DELETE CASCADE,
   CONSTRAINT fk_history_actor FOREIGN KEY (actor_user_id) REFERENCES users(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -97,7 +91,6 @@ CREATE TABLE IF NOT EXISTS published_articles (
   pdf_path VARCHAR(500) NULL,
   published_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   is_visible TINYINT(1) NOT NULL DEFAULT 1,
-  FULLTEXT KEY ft_article_text (title, authors, abstract, keywords),
   CONSTRAINT fk_article_submission FOREIGN KEY (submission_id) REFERENCES submissions(id) ON DELETE SET NULL,
   CONSTRAINT fk_article_issue FOREIGN KEY (issue_id) REFERENCES issues(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

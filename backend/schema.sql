@@ -20,9 +20,18 @@ CREATE TABLE IF NOT EXISTS issues (
   title VARCHAR(255) NULL,
   publication_date DATE NULL,
   pdf_path VARCHAR(500) NULL,
+  legacy_key VARCHAR(190) NULL,
+  legacy_source_url VARCHAR(1000) NULL,
+  legacy_label VARCHAR(255) NULL,
+  migration_status ENUM('native','ready','imported','needs_recovery','duplicate_conflict','failed') NOT NULL DEFAULT 'native',
+  legacy_sha256 CHAR(64) NULL,
+  legacy_pages INT UNSIGNED NULL,
+  legacy_size_bytes BIGINT UNSIGNED NULL,
   is_published TINYINT(1) NOT NULL DEFAULT 0,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  UNIQUE KEY uq_issue_identity (year, series(120), number)
+  UNIQUE KEY uq_issue_identity (year, series(120), number),
+  UNIQUE KEY uq_issue_legacy_key (legacy_key),
+  INDEX idx_issue_migration_status (migration_status)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS submissions (

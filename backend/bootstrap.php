@@ -3,6 +3,10 @@ declare(strict_types=1);
 header('X-Content-Type-Options: nosniff');
 header('X-Frame-Options: SAMEORIGIN');
 header('Referrer-Policy: strict-origin-when-cross-origin');
+header("Permissions-Policy: camera=(), microphone=(), geolocation=()");
+header("Cross-Origin-Opener-Policy: same-origin");
+header("Cross-Origin-Resource-Policy: same-origin");
+header("Content-Security-Policy: default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self'; frame-ancestors 'self'; base-uri 'self'; form-action 'self'");
 
 $configFile=__DIR__.'/config.php';
 if(!is_file($configFile)){http_response_code(500);header('Content-Type: application/json; charset=utf-8');echo json_encode(['error'=>'Backend is not configured'],JSON_UNESCAPED_UNICODE);exit;}
@@ -124,3 +128,115 @@ register_shutdown_function(function(): void {
     record_system_error('fatal',(string)$e['message'],['file'=>$e['file'],'line'=>$e['line']]);
   }
 });
+
+
+function security_secret(): string {
+  global $config;
+  $secret=(string)($config['security']['app_secret']??'');
+  if($secret===''||str_starts_with($secret,'CHANGE_ME')){
+    record_system_error('warning','Security app_secret is not configured');
+  }
+  return $secret;
+}
+
+function client_ip(): string {
+  return (string)($_SERVER['REMOTE_ADDR']??'0.0.0.0');
+}
+
+function security_subject_hash(string $subject): string {
+  return hash_hmac('sha256',$subject,security_secret()?:'fallback-not-for-production');
+}
+
+function validate_same_origin(): void {
+  global $config;
+  if(PHP_SAPI==='cli')return;
+  $method=$_SERVER['REQUEST_METHOD']??'GET';
+  if(in_array($method,['GET','HEAD','OPTIONS'],true))return;
+
+  $base=(string)($config['app']['base_url']??'');
+  $host=parse_url($base,PHP_URL_HOST);
+  if(!$host)return;
+
+  foreach(['HTTP_ORIGIN','HTTP_REFERER'] as $key){
+    if(empty($_SERVER[$key]))continue;
+    $h=parse_url((string)$_SERVER[$key],PHP_URL_HOST);
+    if($h&&strcasecmp($h,$host)!==0){
+      record_system_error('warning','Blocked cross-origin request',['origin'=>(string)$_SERVER[$key],'ip'=>client_ip()]);
+      json_response(['error'=>'Cross-origin request blocked'],403);
+    }
+    return;
+  }
+}
+
+function csrf_token(): string {
+  start_editor_session();
+  if(empty($_SESSION['csrf_token']))$_SESSION['csrf_token']=random_token(32);
+  return (string)$_SESSION['csrf_token'];
+}
+
+function require_csrf(): void {
+  start_editor_session();
+  $sent=(string)($_SERVER['HTTP_X_CSRF_TOKEN']??($_POST['_csrf']??''));
+  $known=(string)($_SESSION['csrf_token']??'');
+  if($known===''||$sent===''||!hash_equals($known,$sent)){
+    record_system_error('warning','CSRF validation failed',['ip'=>client_ip()]);
+    json_response(['error'=>'Security token invalid'],403);
+  }
+}
+
+function rate_limit_check(string $action,string $subject,int $maxAttempts,int $windowSeconds,int $blockSeconds): void {
+  $pdo=db();
+  $hash=security_subject_hash($subject);
+  $stmt=$pdo->prepare('SELECT attempts,window_started_at,blocked_until FROM security_rate_limits WHERE action_key=? AND subject_hash=? LIMIT 1');
+  $stmt->execute([$action,$hash]);
+  $row=$stmt->fetch();
+  $now=time();
+
+  if($row&&$row['blocked_until']&&strtotime($row['blocked_until'])>$now){
+    json_response(['error'=>'Слишком много попыток. Повторите позже.'],429);
+  }
+
+  if(!$row||strtotime($row['window_started_at'])<=($now-$windowSeconds)){
+    $up=$pdo->prepare('INSERT INTO security_rate_limits (action_key,subject_hash,attempts,window_started_at,blocked_until) VALUES (?,?,1,NOW(),NULL) ON DUPLICATE KEY UPDATE attempts=1,window_started_at=NOW(),blocked_until=NULL');
+    $up->execute([$action,$hash]);
+    return;
+  }
+
+  $attempts=(int)$row['attempts']+1;
+  $blocked=$attempts>$maxAttempts;
+  $up=$pdo->prepare('UPDATE security_rate_limits SET attempts=?,blocked_until=? WHERE action_key=? AND subject_hash=?');
+  $up->execute([$attempts,$blocked?date('Y-m-d H:i:s',$now+$blockSeconds):null,$action,$hash]);
+  if($blocked){
+    audit_event(null,'rate_limit_blocked','security',null,['action'=>$action,'ip'=>client_ip()]);
+    json_response(['error'=>'Слишком много попыток. Повторите позже.'],429);
+  }
+}
+
+function rate_limit_reset(string $action,string $subject): void {
+  $stmt=db()->prepare('DELETE FROM security_rate_limits WHERE action_key=? AND subject_hash=?');
+  $stmt->execute([$action,security_subject_hash($subject)]);
+}
+
+function enforce_upload_budget(): void {
+  global $config;
+  $max=(int)($config['security']['max_total_upload_bytes']??(40*1024*1024));
+  $total=0;
+  foreach($_FILES as $file){
+    if(is_array($file['size']??null)){
+      foreach($file['size'] as $s)$total+=(int)$s;
+    }else{
+      $total+=(int)($file['size']??0);
+    }
+  }
+  if($total>$max)json_response(['error'=>'Суммарный размер файлов превышает допустимый'],413);
+}
+
+function form_guard_check(string $startedAt,string $honeypot=''): void {
+  global $config;
+  if(trim($honeypot)!=='')json_response(['error'=>'Spam rejected'],422);
+  $min=(int)($config['security']['min_form_seconds']??3);
+  $ts=(int)$startedAt;
+  if($ts<=0||time()-$ts<$min)json_response(['error'=>'Форма отправлена слишком быстро'],422);
+}
+
+validate_same_origin();

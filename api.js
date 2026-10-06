@@ -89,3 +89,8 @@ async function publicIssue(id) {
 async function publicArticle(slug) {
   return chgpuApi('/public-article.php?slug='+encodeURIComponent(slug));
 }
+
+async function uploadRevisionReal(form) {
+  const fd = new FormData(form);
+  return chgpuApi('/upload-revision.php', { method:'POST', body:fd });
+}

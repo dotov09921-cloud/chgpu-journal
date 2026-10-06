@@ -17,4 +17,7 @@ $files->execute([$id]);
 $history=$pdo->prepare('SELECT h.*,u.full_name AS actor_name FROM submission_history h LEFT JOIN users u ON u.id=h.actor_user_id WHERE h.submission_id=? ORDER BY h.id ASC');
 $history->execute([$id]);
 
-json_response(['submission'=>$sub,'files'=>$files->fetchAll(),'history'=>$history->fetchAll()]);
+$reviews=$pdo->prepare("SELECT ra.id,ra.status,ra.recommendation,ra.reviewer_comment,ra.editor_note,ra.deadline,ra.submitted_at,u.full_name AS reviewer_name,u.email AS reviewer_email FROM review_assignments ra JOIN users u ON u.id=ra.reviewer_id WHERE ra.submission_id=? ORDER BY ra.id DESC");
+$reviews->execute([$id]);
+
+json_response(['submission'=>$sub,'files'=>$files->fetchAll(),'history'=>$history->fetchAll(),'reviews'=>$reviews->fetchAll()]);

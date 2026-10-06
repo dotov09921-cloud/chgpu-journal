@@ -9,7 +9,7 @@ function nextId(items){const nums=items.map(x=>parseInt((x.id||'').match(/(\d+)$
 document.addEventListener('DOMContentLoaded',()=>{
   // archive
   const catalog=document.getElementById('archiveCatalog');
-  if(catalog && window.CHGPU_DATA){
+  if(catalog && window.CHGPU_DATA && !(window.CHGPU_API && window.CHGPU_API.enabled)){
     const filter=document.getElementById('archiveYearFilter');
     CHGPU_DATA.archive.forEach(y=>{const o=document.createElement('option');o.value=y.year;o.textContent=y.year;filter.appendChild(o)});
     const render=()=>{

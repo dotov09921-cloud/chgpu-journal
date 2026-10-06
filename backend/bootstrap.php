@@ -95,3 +95,32 @@ function audit_event(?int $actorUserId,string $eventType,string $entityType,?int
     $stmt->execute([$actorUserId,$eventType,$entityType,$entityId,json_encode($details,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES),$ip?:null]);
   }catch(Throwable $e){}
 }
+
+
+function record_system_error(string $level,string $message,array $context=[]): void {
+  global $config;
+  $entry=[
+    'time'=>date(DATE_ATOM),
+    'level'=>$level,
+    'message'=>$message,
+    'context'=>$context,
+    'uri'=>(string)($_SERVER['REQUEST_URI']??'CLI')
+  ];
+
+  $logDir=__DIR__.'/storage';
+  if(!is_dir($logDir))@mkdir($logDir,0750,true);
+  @file_put_contents($logDir.'/system.log',json_encode($entry,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES)."\n",FILE_APPEND|LOCK_EX);
+
+  try{
+    $stmt=db()->prepare('INSERT INTO system_errors (level,message,context_json,request_uri) VALUES (?,?,?,?)');
+    $stmt->execute([$level,$message,json_encode($context,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES),$entry['uri']]);
+  }catch(Throwable $e){}
+}
+
+register_shutdown_function(function(): void {
+  $e=error_get_last();
+  if(!$e)return;
+  if(in_array($e['type'],[E_ERROR,E_PARSE,E_CORE_ERROR,E_COMPILE_ERROR],true)){
+    record_system_error('fatal',(string)$e['message'],['file'=>$e['file'],'line'=>$e['line']]);
+  }
+});

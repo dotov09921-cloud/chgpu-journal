@@ -3,19 +3,51 @@ window.CHGPU_API = {
   base: '/backend/api'
 };
 
-async function chgpuApi(path, options = {}) {
+let CHGPU_CSRF_TOKEN = null;
+
+async function chgpuCsrfToken(force = false) {
+  if (CHGPU_CSRF_TOKEN && !force) return CHGPU_CSRF_TOKEN;
+  const res = await fetch(window.CHGPU_API.base + '/csrf.php', {
+    credentials: 'same-origin',
+    cache: 'no-store'
+  });
+  if (!res.ok) throw new Error('Не удалось получить защитный токен');
+  const data = await res.json();
+  CHGPU_CSRF_TOKEN = data.token;
+  return CHGPU_CSRF_TOKEN;
+}
+
+async function chgpuApi(path, options = {}, retry = true) {
+  const method = String(options.method || 'GET').toUpperCase();
+  const headers = new Headers(options.headers || {});
+  if (!['GET','HEAD','OPTIONS'].includes(method)) {
+    headers.set('X-CSRF-Token', await chgpuCsrfToken());
+  }
+
   const res = await fetch(window.CHGPU_API.base + path, {
     credentials: 'same-origin',
-    ...options
+    cache: 'no-store',
+    ...options,
+    headers
   });
+
   let data = {};
   try { data = await res.json(); } catch (_) {}
+
+  if (res.status === 403 && retry && data.error === 'Security token invalid') {
+    await chgpuCsrfToken(true);
+    return chgpuApi(path, options, false);
+  }
+
   if (!res.ok) throw new Error(data.error || ('HTTP ' + res.status));
   return data;
 }
 
 async function submitManuscriptReal(form) {
   const fd = new FormData(form);
+  if (!fd.has('form_started_at')) {
+    fd.set('form_started_at', String(window.CHGPU_FORM_STARTED_AT || Math.floor(Date.now()/1000)));
+  }
   const map = {
     author:'author_name',
     email:'author_email',
@@ -31,11 +63,13 @@ async function submitManuscriptReal(form) {
 }
 
 async function editorLogin(email,password) {
-  return chgpuApi('/login.php', {
+  const result = await chgpuApi('/login.php', {
     method:'POST',
     headers:{'Content-Type':'application/json'},
     body:JSON.stringify({email,password})
   });
+  if (result.csrf_token) CHGPU_CSRF_TOKEN = result.csrf_token;
+  return result;
 }
 
 async function editorList(status='') {

@@ -1,0 +1,18 @@
+name: PHP lint
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "backend/**/*.php"
+      - ".github/workflows/php-lint.yml"
+  workflow_dispatch:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate PHP syntax
+        run: |
+          find backend -type f -name "*.php" -print0 | xargs -0 -n1 php -l

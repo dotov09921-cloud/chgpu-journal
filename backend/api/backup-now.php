@@ -3,6 +3,7 @@ declare(strict_types=1);
 require_once __DIR__.'/../bootstrap.php';
 $user=require_roles(['admin']);
 require_method('POST');
+require_csrf();
 require_once __DIR__.'/../maintenance/backup.php';
 
 try{

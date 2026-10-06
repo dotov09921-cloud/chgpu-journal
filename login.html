@@ -15,8 +15,8 @@ document.getElementById('loginForm').addEventListener('submit',async e=>{
   if(!window.CHGPU_API.enabled){ location.href='editor.html'; return; }
   const fd=new FormData(e.currentTarget);
   try{
-    await editorLogin(fd.get('email'),fd.get('password'));
-    location.href='editor.html';
+    const result=await editorLogin(fd.get('email'),fd.get('password'));
+    location.href=result.user.role==='reviewer'?'reviewer.html':'editor.html';
   }catch(err){
     box.style.display='block'; box.textContent=err.message;
   }

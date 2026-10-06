@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 require __DIR__.'/../bootstrap.php';
-require_editor();
+require_roles(['admin','editor']);
 $pdo=db();
 
 if($_SERVER['REQUEST_METHOD']==='GET'){

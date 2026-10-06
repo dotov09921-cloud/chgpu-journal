@@ -39,7 +39,12 @@ async function chgpuApi(path, options = {}, retry = true) {
     return chgpuApi(path, options, false);
   }
 
-  if (!res.ok) throw new Error(data.error || ('HTTP ' + res.status));
+  if (!res.ok) {
+    const err = new Error(data.error || ('HTTP ' + res.status));
+    err.status = res.status;
+    err.code = data.error || null;
+    throw err;
+  }
   return data;
 }
 
@@ -205,4 +210,22 @@ async function publicArchive() {
 }
 function publicArchivePdfUrl(id) {
   return window.CHGPU_API.base + '/archive-pdf.php?id=' + encodeURIComponent(id);
+}
+
+async function currentUser() {
+  return chgpuApi('/me.php');
+}
+
+function chgpuHandleAccessError(err, target) {
+  if (err && err.status === 401) {
+    location.href = 'login.html';
+    return true;
+  }
+  if (err && err.status === 403) {
+    if (target) {
+      target.innerHTML = '<div class="notice"><strong>Недостаточно прав.</strong><br>Этот раздел недоступен для вашей роли.</div><p><a class="btn ghost" href="editor.html">Вернуться в редакцию</a></p>';
+    }
+    return true;
+  }
+  return false;
 }

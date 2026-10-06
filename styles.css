@@ -14,3 +14,6 @@
 @media(max-width:650px){.file-version{align-items:flex-start;flex-direction:column}}
 
 .review-card{border:1px solid var(--line);background:#fff;padding:24px;margin-bottom:16px}.review-card h3{font-size:24px;font-weight:500;margin:10px 0}.review-meta{display:flex;gap:16px;flex-wrap:wrap;font:12px Arial,sans-serif;color:var(--muted);margin:14px 0}.review-summary{border:1px solid var(--line);background:#fff;padding:14px;margin-bottom:10px}.review-assign{border-top:1px solid var(--line);margin-top:24px;padding-top:20px}.review-summaries{margin-top:8px}
+
+.user-admin-grid{display:grid;grid-template-columns:360px 1fr;gap:22px}.user-card{display:flex;justify-content:space-between;gap:18px;align-items:center;border:1px solid var(--line);background:#fff;padding:18px;margin-bottom:10px}.user-card h3{font-size:20px;font-weight:500;margin:0 0 4px}.user-card p{font:13px Arial,sans-serif;margin:0 0 4px}.user-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.user-actions select{border:1px solid var(--line);background:#fff;padding:9px}
+@media(max-width:900px){.user-admin-grid{grid-template-columns:1fr}.user-card{align-items:flex-start;flex-direction:column}}

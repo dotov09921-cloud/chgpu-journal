@@ -43,12 +43,22 @@ document.addEventListener('DOMContentLoaded',()=>{
   // submit
   const form=document.getElementById('submissionForm');
   if(form){
-    form.addEventListener('submit',e=>{
+    form.addEventListener('submit',async e=>{
       e.preventDefault();
+      const box=document.getElementById('successBox');
+      if(window.CHGPU_API && window.CHGPU_API.enabled){
+        box.style.display='block';box.innerHTML='Отправка рукописи…';
+        try{
+          const result=await submitManuscriptReal(form);
+          box.innerHTML='<strong>Материал принят системой.</strong><br>Регистрационный номер: <b>'+result.public_id+'</b>.<br><br><a href="'+result.tracking_url+'">Отслеживать статус статьи →</a>';
+          form.reset();window.CHGPU_FORM_STARTED_AT=Math.floor(Date.now()/1000);window.scrollTo({top:0,behavior:'smooth'});
+        }catch(err){box.innerHTML='<strong>Не удалось отправить.</strong><br>'+err.message}
+        return;
+      }
       const fd=new FormData(form), items=loadSubs(), id=nextId(items);
       const item={id,title:fd.get('title'),author:fd.get('author'),email:fd.get('email'),org:fd.get('org'),orcid:fd.get('orcid'),section:fd.get('section'),language:fd.get('language'),abstract:fd.get('abstract'),keywords:fd.get('keywords'),coauthors:fd.get('coauthors'),status:'new',submittedAt:new Date().toISOString().slice(0,10),history:[{date:today(),text:'Рукопись поступила в редакцию'}],files:{manuscript:fd.get('manuscript')?.name||'',pdf:fd.get('pdf')?.name||''}};
       items.unshift(item);saveSubs(items);
-      const box=document.getElementById('successBox');box.style.display='block';box.innerHTML='<strong>Материал принят системой.</strong><br>Регистрационный номер: <b>'+id+'</b>. Статус: «Новая рукопись».<br><br><a href="editor.html">Открыть кабинет редакции →</a>';
+      box.style.display='block';box.innerHTML='<strong>Материал принят в демо.</strong><br>Регистрационный номер: <b>'+id+'</b>.';
       form.reset();window.scrollTo({top:0,behavior:'smooth'});
     });
   }

@@ -15,7 +15,7 @@ if($assignmentId<1||!in_array($recommendation,['accept','revision','reject'],tru
 
 $pdo=db();$pdo->beginTransaction();
 try{
-  $stmt=$pdo->prepare('SELECT ra.*,s.status AS submission_status FROM review_assignments ra JOIN submissions s ON s.id=ra.submission_id WHERE ra.id=? AND ra.reviewer_id=? FOR UPDATE');
+  $stmt=$pdo->prepare('SELECT ra.*,s.status AS submission_status,s.public_id,s.title FROM review_assignments ra JOIN submissions s ON s.id=ra.submission_id WHERE ra.id=? AND ra.reviewer_id=? FOR UPDATE');
   $stmt->execute([$assignmentId,$user['id']]);$ra=$stmt->fetch();
   if(!$ra)throw new RuntimeException('Назначение не найдено');
 
@@ -26,6 +26,14 @@ try{
     ->execute([$ra['submission_id'],$user['id'],'review_submitted','Получено заключение рецензента']);
 
   $pdo->commit();
+
+  $editorEmail=(string)($config['mail']['editor_email']??'');
+  if($editorEmail!==''){
+    $labels=['accept'=>'Принять','revision'=>'Доработать','reject'=>'Отклонить'];
+    $body='<p>Получено заключение по рукописи <strong>'.mail_escape($ra['public_id']).'</strong>.</p><p><strong>'.mail_escape($ra['title']).'</strong></p><p>Рекомендация: <strong>'.mail_escape($labels[$recommendation]??$recommendation).'</strong>.</p><p>'.nl2br(mail_escape($comment)).'</p>'.mail_button(rtrim($config['app']['base_url'],'/').'/editor.html','Открыть редакционную систему');
+    send_notification((int)$ra['submission_id'],'review_submitted_editor',$editorEmail,'Получено заключение '.$ra['public_id'],mail_layout('Заключение рецензента',$body));
+  }
+
   json_response(['ok'=>true]);
 }catch(Throwable $e){
   if($pdo->inTransaction())$pdo->rollBack();

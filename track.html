@@ -1,18 +1,6 @@
 <!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Статус статьи — Известия ЧГПУ</title><link rel="stylesheet" href="styles.css"></head><body>
 <div class="topline"><div class="wrap"><span>Чеченский государственный педагогический университет</span><span>Известия ЧГПУ</span></div></div>
 <header class="site-header"><div class="wrap brand-row"><div class="uni-mark">ЧГПУ<br>Грозный</div><div class="masthead"><strong>ИЗВЕСТИЯ ЧГПУ</strong><span>Отслеживание рукописи</span></div><div class="header-tools">ISSN 2587-6074</div></div></header>
-<section class="page-hero"><div class="wrap"><div class="crumb">Авторам / Статус рукописи</div><h1>Статус статьи</h1><p class="lead">Персональная ссылка показывает только вашу рукопись и решения редакции, доступные автору.</p></div></section>
+<section class="page-hero"><div class="wrap"><div class="crumb">Авторам / Статус рукописи</div><h1>Статус статьи</h1><p class="lead">Персональная ссылка показывает вашу рукопись и решения редакции.</p></div></section>
 <section class="section"><div class="wrap narrow"><div id="trackBox" class="form-card"><div class="empty-state">Загрузка данных…</div></div></div></section>
-<script src="api.js"></script><script>
-const labels={new:'Новая рукопись',screening:'Первичная проверка',review:'На рецензировании',revision:'Требуется доработка',accepted:'Принята к публикации',rejected:'Отклонена',published:'Опубликована'};
-(async()=>{
- const box=document.getElementById('trackBox');
- const p=new URLSearchParams(location.search), id=p.get('id'), token=p.get('token');
- if(!id||!token){box.innerHTML='<div class="notice">Некорректная ссылка отслеживания.</div>';return;}
- if(!window.CHGPU_API.enabled){box.innerHTML='<div class="notice neutral"><strong>Демо-режим.</strong><br>Реальное отслеживание включится после размещения backend на Beget.</div>';return;}
- try{
-   const d=await trackSubmission(id,token), s=d.submission;
-   box.innerHTML='<div class="crumb">'+s.public_id+'</div><h2>'+s.title+'</h2><div class="tracking-status">'+(labels[s.status]||s.status)+'</div><h3 style="margin-top:28px">История</h3><div class="history">'+d.history.map(h=>'<div><time>'+new Date(h.created_at).toLocaleString("ru-RU")+'</time><p>'+(h.comment||labels[h.to_status]||h.event_type)+'</p></div>').join('')+'</div>';
- }catch(err){box.innerHTML='<div class="notice">'+err.message+'</div>';}
-})();
-</script></body></html>
+<script src="api.js"></script><script src="track.js"></script></body></html>

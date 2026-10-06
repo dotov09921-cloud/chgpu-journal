@@ -199,3 +199,10 @@ function chgpuEscape(value) {
 function chgpuNl2br(value) {
   return chgpuEscape(value).replace(/\n/g,'<br>');
 }
+
+async function publicArchive() {
+  return chgpuApi('/public-archive.php');
+}
+function publicArchivePdfUrl(id) {
+  return window.CHGPU_API.base + '/archive-pdf.php?id=' + encodeURIComponent(id);
+}

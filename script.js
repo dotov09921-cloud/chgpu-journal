@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 
   // editor
   const rows=document.getElementById('submissionRows');
-  if(rows){
+  if(rows && !(window.CHGPU_API && window.CHGPU_API.enabled)){
     let items=loadSubs(), filter='all', selectedId=null;
     const kpis=document.getElementById('editorKpis'), panel=document.getElementById('submissionPanel');
     const badge=s=>'<span class="status-pill status-'+s+'">'+(STATUS[s]||s)+'</span>';

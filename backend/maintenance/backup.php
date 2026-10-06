@@ -19,15 +19,18 @@ function create_backup(?array $actor=null): array {
   $manifestFile=$backupDir.'/manifest-'.$stamp.'.json';
 
   $db=$config['db'];
+  $defaults=tempnam(sys_get_temp_dir(),'chgpu-mysql-');
+  if($defaults===false)throw new RuntimeException('Не удалось подготовить безопасный backup');
+  file_put_contents($defaults,"[client]\nhost=".$db['host']."\nuser=".$db['user']."\npassword=".$db['pass']."\n");
+  chmod($defaults,0600);
   $cmd=sprintf(
-    'mysqldump --single-transaction --quick --skip-lock-tables -h %s -u %s --password=%s %s > %s',
-    escapeshellarg($db['host']),
-    escapeshellarg($db['user']),
-    escapeshellarg($db['pass']),
+    'mysqldump --defaults-extra-file=%s --single-transaction --quick --skip-lock-tables %s > %s',
+    escapeshellarg($defaults),
     escapeshellarg($db['name']),
     escapeshellarg($dbFile)
   );
   exec($cmd,$out,$code);
+  @unlink($defaults);
   if($code!==0||!is_file($dbFile)||filesize($dbFile)===0){
     @unlink($dbFile);
     record_system_error('error','Database backup failed',['exit_code'=>$code]);

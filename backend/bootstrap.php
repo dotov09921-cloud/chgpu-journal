@@ -240,3 +240,37 @@ function form_guard_check(string $startedAt,string $honeypot=''): void {
 }
 
 validate_same_origin();
+
+
+function validate_uploaded_document(string $tmp,string $ext,string $kind): string {
+  if(!is_uploaded_file($tmp))throw new RuntimeException('Некорректный временный файл');
+  $ext=strtolower($ext);
+  $head=file_get_contents($tmp,false,null,0,16);
+  if($head===false)throw new RuntimeException('Не удалось прочитать файл');
+
+  if($kind==='pdf'){
+    if($ext!=='pdf'||substr($head,0,5)!=='%PDF-')throw new RuntimeException('Файл не является корректным PDF');
+    return 'application/pdf';
+  }
+
+  if($ext==='doc'){
+    $ole="\xD0\xCF\x11\xE0\xA1\xB1\x1A\xE1";
+    if(substr($head,0,8)!==$ole)throw new RuntimeException('Файл не является корректным DOC');
+    return 'application/msword';
+  }
+
+  if($ext==='docx'){
+    if(substr($head,0,2)!=='PK')throw new RuntimeException('Файл не является корректным DOCX');
+    if(class_exists('ZipArchive')){
+      $zip=new ZipArchive();
+      if($zip->open($tmp)!==true)throw new RuntimeException('Повреждённый DOCX');
+      $hasTypes=$zip->locateName('[Content_Types].xml')!==false;
+      $hasDocument=$zip->locateName('word/document.xml')!==false;
+      $zip->close();
+      if(!$hasTypes||!$hasDocument)throw new RuntimeException('Файл не является документом Word');
+    }
+    return 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+  }
+
+  throw new RuntimeException('Недопустимый тип файла');
+}

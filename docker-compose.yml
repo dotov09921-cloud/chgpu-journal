@@ -19,7 +19,7 @@ services:
     image: axllent/mailpit:latest
     restart: unless-stopped
     ports:
-      - "8025:8025"
+      - "127.0.0.1:8025:8025"
 
   web:
     build:
@@ -41,7 +41,7 @@ services:
       MAIL_FROM: journal@chgpu.local
       MAIL_EDITOR: editor@chgpu.local
     ports:
-      - "8080:80"
+      - "127.0.0.1:8080:80"
     volumes:
       - ./:/var/www/html
     healthcheck:

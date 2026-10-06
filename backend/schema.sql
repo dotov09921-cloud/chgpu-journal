@@ -5,7 +5,8 @@ CREATE TABLE IF NOT EXISTS users (
   full_name VARCHAR(190) NOT NULL,
   role ENUM('admin','editor','reviewer') NOT NULL DEFAULT 'editor',
   is_active TINYINT(1) NOT NULL DEFAULT 1,
-  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY uq_issue_identity (year, series(120), number)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS issues (
@@ -91,6 +92,8 @@ CREATE TABLE IF NOT EXISTS published_articles (
   pdf_path VARCHAR(500) NULL,
   published_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   is_visible TINYINT(1) NOT NULL DEFAULT 1,
+  UNIQUE KEY uq_published_submission (submission_id),
+  INDEX idx_articles_issue (issue_id),
   CONSTRAINT fk_article_submission FOREIGN KEY (submission_id) REFERENCES submissions(id) ON DELETE SET NULL,
   CONSTRAINT fk_article_issue FOREIGN KEY (issue_id) REFERENCES issues(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

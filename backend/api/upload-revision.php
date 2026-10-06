@@ -69,6 +69,15 @@ try{
   $hist->execute([$sub['id'],'revision_uploaded','revision','screening',$text]);
 
   $pdo->commit();
+
+  $editorEmail=(string)($config['mail']['editor_email']??'');
+  if($editorEmail!==''){
+    $body='<p>Автор загрузил новую версию <strong>№'.$version.'</strong> для рукописи <strong>'.mail_escape($sub['public_id']).'</strong>.</p>';
+    if($comment!=='')$body.='<p>Комментарий автора: '.nl2br(mail_escape($comment)).'</p>';
+    $body.=mail_button(rtrim($config['app']['base_url'],'/').'/editor.html','Открыть редакционную систему');
+    send_notification((int)$sub['id'],'revision_uploaded_editor',$editorEmail,'Новая версия '.$sub['public_id'],mail_layout('Получена доработанная версия',$body));
+  }
+
   json_response(['ok'=>true,'version'=>$version,'status'=>'screening'],201);
 }catch(Throwable $e){
   if($pdo->inTransaction())$pdo->rollBack();

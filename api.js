@@ -94,3 +94,24 @@ async function uploadRevisionReal(form) {
   const fd = new FormData(form);
   return chgpuApi('/upload-revision.php', { method:'POST', body:fd });
 }
+
+async function editorReviewers() {
+  return chgpuApi('/reviewers.php');
+}
+async function editorAssignReviewer(payload) {
+  return chgpuApi('/assign-reviewer.php', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(payload)
+  });
+}
+async function reviewerAssignments() {
+  return chgpuApi('/my-reviews.php');
+}
+async function reviewerSubmit(payload) {
+  return chgpuApi('/submit-review.php', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(payload)
+  });
+}

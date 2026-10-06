@@ -27,6 +27,27 @@ try{
   $hist->execute([$id,$user['id'],'status_changed',$old,$newStatus,$comment,$visible?1:0]);
 
   $pdo->commit();
+
+  if($visible){
+    $s=$pdo->prepare('SELECT public_id,title,author_name,author_email,tracking_token FROM submissions WHERE id=? LIMIT 1');
+    $s->execute([$id]);$mailSub=$s->fetch();
+    if($mailSub){
+      $statusLabels=[
+        'screening'=>'Первичная проверка',
+        'review'=>'На рецензировании',
+        'revision'=>'Требуется доработка',
+        'accepted'=>'Принята к публикации',
+        'rejected'=>'Отклонена',
+        'published'=>'Опубликована'
+      ];
+      $track=rtrim($config['app']['base_url'],'/').'/track.html?id='.urlencode($mailSub['public_id']).'&token='.urlencode($mailSub['tracking_token']);
+      $body='<p>Статус рукописи <strong>'.mail_escape($mailSub['public_id']).'</strong> изменён: <strong>'.mail_escape($statusLabels[$newStatus]??$newStatus).'</strong>.</p>';
+      if($comment!=='')$body.='<p>'.nl2br(mail_escape($comment)).'</p>';
+      $body.=mail_button($track,'Открыть статус рукописи');
+      send_notification($id,'status_'.$newStatus,$mailSub['author_email'],'Статус рукописи '.$mailSub['public_id'],mail_layout('Изменение статуса',$body));
+    }
+  }
+
   json_response(['ok'=>true,'from'=>$old,'to'=>$newStatus]);
 }catch(Throwable $e){
   if($pdo->inTransaction())$pdo->rollBack();

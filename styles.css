@@ -12,3 +12,5 @@
 
 .revision-box{margin-top:28px;padding-top:24px;border-top:1px solid var(--line)}.file-versions{border-top:1px solid var(--line)}.file-version{display:flex;justify-content:space-between;gap:16px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}.file-version code{font:10px/1.4 monospace;color:var(--muted);word-break:break-all}.file-version .btn{flex:0 0 auto}
 @media(max-width:650px){.file-version{align-items:flex-start;flex-direction:column}}
+
+.review-card{border:1px solid var(--line);background:#fff;padding:24px;margin-bottom:16px}.review-card h3{font-size:24px;font-weight:500;margin:10px 0}.review-meta{display:flex;gap:16px;flex-wrap:wrap;font:12px Arial,sans-serif;color:var(--muted);margin:14px 0}.review-summary{border:1px solid var(--line);background:#fff;padding:14px;margin-bottom:10px}.review-assign{border-top:1px solid var(--line);margin-top:24px;padding-top:20px}.review-summaries{margin-top:8px}

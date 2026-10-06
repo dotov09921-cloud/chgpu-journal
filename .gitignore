@@ -1,0 +1,5 @@
+backend/config.php
+backend/storage/uploads/*
+!backend/storage/uploads/.gitkeep
+*.log
+.DS_Store

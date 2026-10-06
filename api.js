@@ -57,3 +57,35 @@ async function editorSetStatus(id,status,comment='',visible_to_author=true) {
 async function trackSubmission(id,token) {
   return chgpuApi('/track.php?id='+encodeURIComponent(id)+'&token='+encodeURIComponent(token));
 }
+
+
+async function editorIssues() {
+  return chgpuApi('/issues.php');
+}
+async function editorCreateIssue(payload) {
+  return chgpuApi('/issues.php', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({action:'create',...payload})
+  });
+}
+async function editorSetIssuePublished(id,is_published) {
+  return chgpuApi('/issues.php', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({action:'set_published',id,is_published})
+  });
+}
+async function editorPublishArticle(payload) {
+  return chgpuApi('/publish.php', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(payload)
+  });
+}
+async function publicIssue(id) {
+  return chgpuApi('/public-issue.php?id='+encodeURIComponent(id));
+}
+async function publicArticle(slug) {
+  return chgpuApi('/public-article.php?slug='+encodeURIComponent(slug));
+}

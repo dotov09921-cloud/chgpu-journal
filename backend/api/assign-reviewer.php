@@ -3,6 +3,7 @@ declare(strict_types=1);
 require __DIR__.'/../bootstrap.php';
 $user=require_roles(['admin','editor']);
 require_method('POST');
+require_csrf();
 
 $body=json_decode(file_get_contents('php://input'),true)?:[];
 $submissionId=(int)($body['submission_id']??0);

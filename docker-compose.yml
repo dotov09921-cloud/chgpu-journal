@@ -1,0 +1,54 @@
+services:
+  db:
+    image: mariadb:11.4
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: chgpu_journal
+      MARIADB_USER: chgpu
+      MARIADB_PASSWORD: chgpu_dev_password
+      MARIADB_ROOT_PASSWORD: chgpu_root_dev_password
+    volumes:
+      - chgpu_db:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  mailpit:
+    image: axllent/mailpit:latest
+    restart: unless-stopped
+    ports:
+      - "8025:8025"
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+      mailpit:
+        condition: service_started
+    environment:
+      DB_HOST: db
+      DB_NAME: chgpu_journal
+      DB_USER: chgpu
+      DB_PASS: chgpu_dev_password
+      APP_URL: http://localhost:8080
+      APP_SECRET: local-dev-secret-change-before-production-2026
+      MAIL_FROM: journal@chgpu.local
+      MAIL_EDITOR: editor@chgpu.local
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www/html
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost/backend/health.php"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  chgpu_db:

@@ -2,6 +2,10 @@
 declare(strict_types=1);
 require __DIR__.'/../bootstrap.php';
 require_method('POST');
+require_csrf();
+enforce_upload_budget();
+$sec=$config['security']??[];
+rate_limit_check('revision',client_ip(),(int)($sec['revision_max_per_hour']??10),3600,3600);
 
 $publicId=trim((string)($_POST['id']??''));
 $token=trim((string)($_POST['token']??''));
@@ -47,9 +51,7 @@ try{
     $ext=strtolower(pathinfo($original,PATHINFO_EXTENSION));
     if(!in_array($ext,$allowed[$field]['extensions'],true))throw new RuntimeException('Недопустимое расширение');
 
-    $finfo=new finfo(FILEINFO_MIME_TYPE);
-    $mime=(string)$finfo->file($_FILES[$field]['tmp_name']);
-    if(!in_array($mime,$allowed[$field]['mimes'],true))throw new RuntimeException('Недопустимый тип файла');
+    $mime=validate_uploaded_document($_FILES[$field]['tmp_name'],$ext,$field);
 
     $stored=$field.'-v'.$version.'-'.random_token(10).'.'.$ext;
     $target=$uploadDir.'/'.$stored;

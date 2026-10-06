@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
-require __DIR__.'/../bootstrap.php';
+require_once __DIR__.'/../bootstrap.php';
 $user=require_roles(['admin']);
 require_method('POST');
+require_once __DIR__.'/../maintenance/backup.php';
 
-ob_start();
 try{
-  require __DIR__.'/../maintenance/backup.php';
+  $manifest=create_backup($user);
+  json_response(['ok'=>true,'manifest'=>$manifest]);
 }catch(Throwable $e){
-  ob_end_clean();
   record_system_error('error','Manual backup failed',['error'=>$e->getMessage()]);
   json_response(['error'=>$e->getMessage()],500);
 }

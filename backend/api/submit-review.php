@@ -3,6 +3,7 @@ declare(strict_types=1);
 require __DIR__.'/../bootstrap.php';
 $user=require_roles(['reviewer']);
 require_method('POST');
+require_csrf();
 
 $body=json_decode(file_get_contents('php://input'),true)?:[];
 $assignmentId=(int)($body['assignment_id']??0);

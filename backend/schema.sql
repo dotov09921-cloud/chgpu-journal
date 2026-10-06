@@ -97,3 +97,23 @@ CREATE TABLE IF NOT EXISTS published_articles (
   CONSTRAINT fk_article_submission FOREIGN KEY (submission_id) REFERENCES submissions(id) ON DELETE SET NULL,
   CONSTRAINT fk_article_issue FOREIGN KEY (issue_id) REFERENCES issues(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS review_assignments (
+  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  submission_id BIGINT UNSIGNED NOT NULL,
+  reviewer_id BIGINT UNSIGNED NOT NULL,
+  assigned_by_user_id BIGINT UNSIGNED NOT NULL,
+  status ENUM('assigned','in_progress','submitted','cancelled') NOT NULL DEFAULT 'assigned',
+  recommendation ENUM('accept','revision','reject') NULL,
+  reviewer_comment TEXT NULL,
+  editor_note TEXT NULL,
+  deadline DATE NULL,
+  submitted_at DATETIME NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  UNIQUE KEY uq_review_submission_reviewer (submission_id, reviewer_id),
+  INDEX idx_review_reviewer_status (reviewer_id, status),
+  CONSTRAINT fk_review_submission FOREIGN KEY (submission_id) REFERENCES submissions(id) ON DELETE CASCADE,
+  CONSTRAINT fk_review_reviewer FOREIGN KEY (reviewer_id) REFERENCES users(id) ON DELETE CASCADE,
+  CONSTRAINT fk_review_assigner FOREIGN KEY (assigned_by_user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

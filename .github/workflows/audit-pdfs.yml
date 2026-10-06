@@ -40,7 +40,8 @@ jobs:
             echo "No audit changes to commit"
           else
             git commit -m "Update PDF archive audit"
-            git push
+            git pull --rebase origin main
+            git push origin main
           fi
 
       - name: Upload audit artifact

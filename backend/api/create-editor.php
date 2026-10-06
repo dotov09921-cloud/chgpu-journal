@@ -6,6 +6,7 @@ $count=(int)db()->query('SELECT COUNT(*) AS c FROM users')->fetch()['c'];
 if($count>0)json_response(['error'=>'Первый пользователь уже создан'],403);
 
 require_method('POST');
+require_csrf();
 $body=json_decode(file_get_contents('php://input'),true)?:[];
 $email=trim((string)($body['email']??''));
 $password=(string)($body['password']??'');

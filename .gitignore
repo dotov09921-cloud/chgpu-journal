@@ -6,3 +6,5 @@ backend/storage/uploads/*
 backend/storage/backups/*
 !backend/storage/backups/.gitkeep
 backend/storage/system.log
+backend/storage/archive/*
+!backend/storage/archive/.gitkeep

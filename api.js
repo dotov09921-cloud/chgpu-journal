@@ -229,3 +229,7 @@ function chgpuHandleAccessError(err, target) {
   }
   return false;
 }
+
+async function logoutUser() {
+  return chgpuApi('/logout.php', { method:'POST' });
+}

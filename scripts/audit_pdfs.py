@@ -4,6 +4,7 @@ import hashlib
 import json
 import os
 import subprocess
+import ssl
 import tempfile
 import urllib.request
 import urllib.error
@@ -49,7 +50,8 @@ for idx, (url, linked) in enumerate(groups.items(), 1):
             ""
         ))
         req = urllib.request.Request(safe_url, headers={"User-Agent": ua})
-        with urllib.request.urlopen(req, timeout=90) as resp, open(tmp_name, "wb") as out:
+        ssl_context = ssl._create_unverified_context() if parts.netloc.endswith("chspu.ru") else None
+        with urllib.request.urlopen(req, timeout=90, context=ssl_context) as resp, open(tmp_name, "wb") as out:
             http_status = getattr(resp, "status", 200)
             content_type = resp.headers.get("Content-Type", "")
             h = hashlib.sha256()

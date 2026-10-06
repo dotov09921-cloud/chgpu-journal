@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 require __DIR__.'/../bootstrap.php';
-require_editor();
+require_roles(['admin','editor']);
 
 $id=(int)($_GET['id']??0);
 if($id<1){http_response_code(404);exit;}

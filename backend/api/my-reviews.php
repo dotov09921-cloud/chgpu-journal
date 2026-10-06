@@ -4,7 +4,9 @@ require __DIR__.'/../bootstrap.php';
 $user=require_roles(['reviewer']);
 
 $sql="SELECT ra.id AS assignment_id,ra.status AS review_status,ra.deadline,ra.recommendation,ra.reviewer_comment,ra.editor_note,
-            s.id AS submission_id,s.public_id,s.title,s.section,s.abstract,s.keywords,s.created_at
+            s.id AS submission_id,s.public_id,s.title,s.section,s.abstract,s.keywords,s.created_at,
+            (SELECT sf.id FROM submission_files sf WHERE sf.submission_id=s.id AND sf.file_type='manuscript' ORDER BY sf.version_no DESC,sf.id DESC LIMIT 1) AS latest_file_id,
+            (SELECT sf.original_name FROM submission_files sf WHERE sf.submission_id=s.id AND sf.file_type='manuscript' ORDER BY sf.version_no DESC,sf.id DESC LIMIT 1) AS latest_file_name
       FROM review_assignments ra
       JOIN submissions s ON s.id=ra.submission_id
       WHERE ra.reviewer_id=? AND ra.status<>'cancelled'

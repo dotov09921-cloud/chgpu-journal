@@ -15,6 +15,8 @@ if(!$user||!$user['is_active']||!password_verify($password,$user['password_hash'
 start_editor_session();
 session_regenerate_id(true);
 $_SESSION['user_id']=(int)$user['id'];
+db()->prepare('UPDATE users SET last_login_at=NOW() WHERE id=?')->execute([$user['id']]);
+audit_event((int)$user['id'],'login','user',(int)$user['id'],['role'=>$user['role']]);
 
 json_response(['ok'=>true,'user'=>[
   'id'=>(int)$user['id'],

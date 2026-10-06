@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 require __DIR__.'/../bootstrap.php';
-$user=require_editor();
+$user=require_roles(['admin','editor']);
 
 $id=(int)($_GET['id']??0);
 if($id<1)json_response(['error'=>'Некорректный id'],422);

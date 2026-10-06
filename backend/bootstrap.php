@@ -32,3 +32,57 @@ function require_roles(array $roles): array {
   if(!in_array($user['role'],$roles,true))json_response(['error'=>'Forbidden'],403);
   return $user;
 }
+
+
+function send_notification(?int $submissionId,string $eventType,string $to,string $subject,string $html): bool {
+  global $config;
+  $mailCfg=$config['mail']??[];
+  $enabled=(bool)($mailCfg['enabled']??false);
+  $prefix=(string)($mailCfg['subject_prefix']??'');
+  $fullSubject=$prefix.$subject;
+  $status='disabled';$error=null;$sent=false;
+
+  if($enabled){
+    if(!filter_var($to,FILTER_VALIDATE_EMAIL)){
+      $status='failed';$error='Invalid recipient';
+    }else{
+      $fromEmail=(string)($mailCfg['from_email']??'');
+      $fromName=(string)($mailCfg['from_name']??'Известия ЧГПУ');
+      $safeFrom=preg_replace('/[\r\n]+/','',$fromEmail);
+      $safeName=preg_replace('/[\r\n]+/','',$fromName);
+      $headers=[
+        'MIME-Version: 1.0',
+        'Content-Type: text/html; charset=UTF-8',
+        'From: '.mb_encode_mimeheader($safeName,'UTF-8')." <".$safeFrom.">",
+        'Reply-To: '.$safeFrom
+      ];
+      try{
+        $sent=@mail($to,mb_encode_mimeheader($fullSubject,'UTF-8'),$html,implode("\r\n",$headers));
+        $status=$sent?'sent':'failed';
+        if(!$sent)$error='mail() returned false';
+      }catch(Throwable $e){
+        $status='failed';$error=$e->getMessage();
+      }
+    }
+  }
+
+  try{
+    $stmt=db()->prepare('INSERT INTO notification_log (submission_id,event_type,recipient,subject,status,error_text) VALUES (?,?,?,?,?,?)');
+    $stmt->execute([$submissionId,$eventType,$to,$fullSubject,$status,$error]);
+  }catch(Throwable $e){}
+
+  return $sent;
+}
+
+function mail_escape(string $value): string {
+  return htmlspecialchars($value,ENT_QUOTES|ENT_SUBSTITUTE,'UTF-8');
+}
+
+function mail_button(string $url,string $label): string {
+  $u=mail_escape($url);$l=mail_escape($label);
+  return '<p style="margin:24px 0"><a href="'.$u.'" style="display:inline-block;background:#22342f;color:#fff;text-decoration:none;padding:12px 18px;border-radius:3px">'.$l.'</a></p>';
+}
+
+function mail_layout(string $title,string $body): string {
+  return '<!doctype html><html><body style="margin:0;background:#f3f1eb;font-family:Arial,sans-serif;color:#1a1a1a"><div style="max-width:680px;margin:0 auto;padding:28px"><div style="background:#fff;border:1px solid #d8d5cd;padding:28px"><div style="font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#666">Известия ЧГПУ</div><h2 style="font-family:Georgia,serif;font-weight:500">'.$title.'</h2>'.$body.'<hr style="border:0;border-top:1px solid #ddd;margin:28px 0"><p style="font-size:12px;color:#777">Это автоматическое уведомление редакционной системы.</p></div></div></body></html>';
+}

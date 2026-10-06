@@ -1,0 +1,8 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Система — Известия ЧГПУ</title><link rel="stylesheet" href="styles.css"></head><body>
+<div class="topline"><div class="wrap"><span>Служебный раздел</span><span>Состояние системы</span></div></div>
+<section class="section"><div class="wrap"><div class="dashboard">
+<aside class="side"><div class="logo">ИЗВЕСТИЯ ЧГПУ</div><a href="editor.html">Рукописи</a><a href="admin-users.html">Пользователи</a><a href="audit.html">Журнал действий</a><a class="active" href="system.html">Система</a><a href="index.html">← На сайт</a></aside>
+<main class="dash-main"><div class="dash-head"><div><div class="crumb">Администратор</div><h2>Состояние системы</h2></div><div class="actions"><button class="btn ghost" id="integrityBtn">Проверить целостность</button><button class="btn accent" id="backupBtn">Создать backup</button><a class="btn ghost" id="exportBtn" href="#">Экспорт данных</a></div></div>
+<div id="systemStatus"></div><div id="systemMsg" class="notice neutral" style="display:none"></div>
+</main></div></div></section>
+<script src="api.js"></script><script src="system.js"></script></body></html>

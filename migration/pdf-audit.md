@@ -2,11 +2,11 @@
 
 - Позиций архива: **51**
 - Уникальных PDF URL: **45**
-- Успешно проверено: **0 / 45**
-- Требуют проверки: **45**
+- Успешно проверено: **33 / 45**
+- Требуют проверки: **12**
 - Уникальных URL, привязанных к нескольким выпускам: **3**
-- Общий объём уникальных PDF: **0.0 ГБ**
-- Суммарное число страниц по успешно прочитанным PDF: **0**
+- Общий объём уникальных PDF: **0.08 ГБ**
+- Суммарное число страниц по успешно прочитанным PDF: **4974**
 
 Проверка включает HTTP-доступность, PDF-сигнатуру %PDF-, размер файла, количество страниц через pdfinfo и SHA-256.
 
@@ -14,40 +14,40 @@
 
 | № | Результат | Размер | Страниц | Привязок | Выпуски |
 |---:|---|---:|---:|---:|---|
-| 1 | ⚠️ CHECK | 0.0 MB | — | 1 | 2026 Серия 2. Вопросы философии и психологии №1 (1) 2026 |
-| 2 | ⚠️ CHECK | 0.0 MB | — | 1 | 2026 Серия 1 гуманитарные и общественные науки № 2 (54) 2026 |
-| 3 | ⚠️ CHECK | 0.0 MB | — | 1 | 2026 Серия 1 гуманитарные и общественные науки № 1 (53) 2026 |
-| 4 | ⚠️ CHECK | 0.0 MB | — | 1 | 2025 Серия 1 гуманитарные и общественные науки № 4 (52) 2025 |
-| 5 | ⚠️ CHECK | 0.0 MB | — | 1 | 2025 Серия 1. Гуманитарные и общественные науки №3 (51), 2025 |
-| 6 | ⚠️ CHECK | 0.0 MB | — | 1 | 2025 Серия 1. Гуманитарные и общественные науки №2 (50), 2025 |
-| 7 | ⚠️ CHECK | 0.0 MB | — | 1 | 2025 Серия 1. Гуманитарные и общественные науки №1 (49), 2025 |
-| 8 | ⚠️ CHECK | 0.0 MB | — | 1 | 2024 Серия 1. Гуманитарные и общественные науки №4 (48) 2024 |
-| 9 | ⚠️ CHECK | 0.0 MB | — | 1 | 2024 Серия 1. Гуманитарные и общественные науки №3 (47) 2024 |
-| 10 | ⚠️ CHECK | 0.0 MB | — | 1 | 2024 Серия 1. Гуманитарные и общественные науки №2 (46) 2024 |
-| 11 | ⚠️ CHECK | 0.0 MB | — | 1 | 2024 Серия 1. Гуманитарные и общественные науки №1 (45) 2024 |
-| 12 | ⚠️ CHECK | 0.0 MB | — | 1 | 2024 Серия 2. Психологические и философские науки №1 (1) 2024 |
-| 13 | ⚠️ CHECK | 0.0 MB | — | 1 | 2024 Серия 2. Психологические и философские науки №2 (2) 2024 |
-| 14 | ⚠️ CHECK | 0.0 MB | — | 1 | 2024 Серия 2. Психологические и философские науки №3 (3) 2024 |
-| 15 | ⚠️ CHECK | 0.0 MB | — | 1 | 2023 Серия 1. Гуманитарные и общественные науки №4 (44), 2023 |
-| 16 | ⚠️ CHECK | 0.0 MB | — | 1 | 2023 Серия 1. Гуманитарные и общественные науки №3 (43), 2023 |
-| 17 | ⚠️ CHECK | 0.0 MB | — | 1 | 2023 Серия 1. Гуманитарные и общественные науки №2 (42), 2023 |
-| 18 | ⚠️ CHECK | 0.0 MB | — | 1 | 2023 Серия 1. Гуманитарные и общественные науки №1 (41), 2023 |
-| 19 | ⚠️ CHECK | 0.0 MB | — | 1 | 2022 Серия 1. Гуманитарные и общественные науки №4 (40), 2022 |
-| 20 | ⚠️ CHECK | 0.0 MB | — | 1 | 2022 Серия 1. Гуманитарные и общественные науки №3 (39), 2022 |
-| 21 | ⚠️ CHECK | 0.0 MB | — | 1 | 2022 Серия 1. Гуманитарные и общественные науки №2 (38), 2022 |
-| 22 | ⚠️ CHECK | 0.0 MB | — | 1 | 2022 Серия 1. Гуманитарные и общественные науки №1 (37), 2022 |
-| 23 | ⚠️ CHECK | 0.0 MB | — | 1 | 2021 Серия 1. Гуманитарные и общественные науки №4 |
-| 24 | ⚠️ CHECK | 0.0 MB | — | 1 | 2021 Серия 1. Гуманитарные и общественные науки №3 |
-| 25 | ⚠️ CHECK | 0.0 MB | — | 1 | 2021 Серия 1. Гуманитарные и общественные науки №2 |
-| 26 | ⚠️ CHECK | 0.0 MB | — | 1 | 2021 Серия 1. Гуманитарные и общественные науки №1 |
-| 27 | ⚠️ CHECK | 0.0 MB | — | 1 | 2021 Серия 2. Естественные и технические науки №1 |
-| 28 | ⚠️ CHECK | 0.0 MB | — | 1 | 2021 Серия 2. Естественные и технические науки №2 (25), 2021 |
+| 1 | ✅ OK | 0.94 MB | 103 | 1 | 2026 Серия 2. Вопросы философии и психологии №1 (1) 2026 |
+| 2 | ✅ OK | 2.56 MB | 218 | 1 | 2026 Серия 1 гуманитарные и общественные науки № 2 (54) 2026 |
+| 3 | ✅ OK | 2.74 MB | 177 | 1 | 2026 Серия 1 гуманитарные и общественные науки № 1 (53) 2026 |
+| 4 | ✅ OK | 4.35 MB | 209 | 1 | 2025 Серия 1 гуманитарные и общественные науки № 4 (52) 2025 |
+| 5 | ✅ OK | 3.57 MB | 212 | 1 | 2025 Серия 1. Гуманитарные и общественные науки №3 (51), 2025 |
+| 6 | ✅ OK | 4.1 MB | 157 | 1 | 2025 Серия 1. Гуманитарные и общественные науки №2 (50), 2025 |
+| 7 | ✅ OK | 2.34 MB | 145 | 1 | 2025 Серия 1. Гуманитарные и общественные науки №1 (49), 2025 |
+| 8 | ✅ OK | 2.75 MB | 197 | 1 | 2024 Серия 1. Гуманитарные и общественные науки №4 (48) 2024 |
+| 9 | ✅ OK | 1.59 MB | 149 | 1 | 2024 Серия 1. Гуманитарные и общественные науки №3 (47) 2024 |
+| 10 | ✅ OK | 2.43 MB | 145 | 1 | 2024 Серия 1. Гуманитарные и общественные науки №2 (46) 2024 |
+| 11 | ✅ OK | 2.19 MB | 137 | 1 | 2024 Серия 1. Гуманитарные и общественные науки №1 (45) 2024 |
+| 12 | ✅ OK | 1.17 MB | 101 | 1 | 2024 Серия 2. Психологические и философские науки №1 (1) 2024 |
+| 13 | ✅ OK | 1.34 MB | 79 | 1 | 2024 Серия 2. Психологические и философские науки №2 (2) 2024 |
+| 14 | ✅ OK | 1.42 MB | 108 | 1 | 2024 Серия 2. Психологические и философские науки №3 (3) 2024 |
+| 15 | ✅ OK | 0.92 MB | 101 | 1 | 2023 Серия 1. Гуманитарные и общественные науки №4 (44), 2023 |
+| 16 | ✅ OK | 0.9 MB | 100 | 1 | 2023 Серия 1. Гуманитарные и общественные науки №3 (43), 2023 |
+| 17 | ✅ OK | 2.62 MB | 132 | 1 | 2023 Серия 1. Гуманитарные и общественные науки №2 (42), 2023 |
+| 18 | ✅ OK | 2.76 MB | 109 | 1 | 2023 Серия 1. Гуманитарные и общественные науки №1 (41), 2023 |
+| 19 | ✅ OK | 2.17 MB | 167 | 1 | 2022 Серия 1. Гуманитарные и общественные науки №4 (40), 2022 |
+| 20 | ✅ OK | 2.6 MB | 105 | 1 | 2022 Серия 1. Гуманитарные и общественные науки №3 (39), 2022 |
+| 21 | ✅ OK | 2.69 MB | 122 | 1 | 2022 Серия 1. Гуманитарные и общественные науки №2 (38), 2022 |
+| 22 | ✅ OK | 2.12 MB | 117 | 1 | 2022 Серия 1. Гуманитарные и общественные науки №1 (37), 2022 |
+| 23 | ✅ OK | 2.71 MB | 192 | 1 | 2021 Серия 1. Гуманитарные и общественные науки №4 |
+| 24 | ✅ OK | 1.89 MB | 124 | 1 | 2021 Серия 1. Гуманитарные и общественные науки №3 |
+| 25 | ✅ OK | 2.01 MB | 130 | 1 | 2021 Серия 1. Гуманитарные и общественные науки №2 |
+| 26 | ✅ OK | 2.73 MB | 181 | 1 | 2021 Серия 1. Гуманитарные и общественные науки №1 |
+| 27 | ✅ OK | 3.07 MB | 104 | 1 | 2021 Серия 2. Естественные и технические науки №1 |
+| 28 | ✅ OK | 3.27 MB | 92 | 1 | 2021 Серия 2. Естественные и технические науки №2 (25), 2021 |
 | 29 | ⚠️ CHECK | 0.0 MB | — | 2 | 2020 Серия 1. Гуманитарные и общественные науки №1(29) том 27.; 2020 Серия 1. Гуманитарные и общественные науки №2(30) том 28. |
-| 30 | ⚠️ CHECK | 0.0 MB | — | 1 | 2020 Серия 1 Гуманитарные и общественные науки №4(32) |
-| 31 | ⚠️ CHECK | 0.0 MB | — | 1 | 2020 Серия 2. Естественные и технические науки №2 (23) |
-| 32 | ⚠️ CHECK | 0.0 MB | — | 1 | 2020 Серия 1 Гуманитарные и общественные науки №3 (31) |
+| 30 | ✅ OK | 3.56 MB | 245 | 1 | 2020 Серия 1 Гуманитарные и общественные науки №4(32) |
+| 31 | ✅ OK | 2.55 MB | 81 | 1 | 2020 Серия 2. Естественные и технические науки №2 (23) |
+| 32 | ✅ OK | 3.12 MB | 203 | 1 | 2020 Серия 1 Гуманитарные и общественные науки №3 (31) |
 | 33 | ⚠️ CHECK | 0.0 MB | — | 1 | 2020 Серия 2. Естественные и технические науки №1 (22) том 19. |
-| 34 | ⚠️ CHECK | 0.0 MB | — | 5 | 2019 Серия 1. Гуманитарные и общественные науки №1(25) том 23.; 2018 Серия 1. Гуманитарные и общественные науки №1(21) том 18.; 2018 Серия 1. Гуманитарные и общественные науки №2(22) том 19.; 2018 Серия 1. Гуманитарные и общественные науки №3(23) том 21.; 2018 Серия 1. Гуманитарные и общественные науки №4(24) том 22. |
+| 34 | ✅ OK | 1.9 MB | 238 | 5 | 2019 Серия 1. Гуманитарные и общественные науки №1(25) том 23.; 2018 Серия 1. Гуманитарные и общественные науки №1(21) том 18.; 2018 Серия 1. Гуманитарные и общественные науки №2(22) том 19.; 2018 Серия 1. Гуманитарные и общественные науки №3(23) том 21.; 2018 Серия 1. Гуманитарные и общественные науки №4(24) том 22. |
 | 35 | ⚠️ CHECK | 0.0 MB | — | 1 | 2019 Серия 1. Гуманитарные и общественные науки №2(26) том 24. |
 | 36 | ⚠️ CHECK | 0.0 MB | — | 1 | 2019 Серия 1. Гуманитарные и общественные науки №3(27) том 25. |
 | 37 | ⚠️ CHECK | 0.0 MB | — | 1 | 2019 Серия 1. Гуманитарные и общественные науки №4(28) том 26. |
@@ -57,56 +57,23 @@
 | 41 | ⚠️ CHECK | 0.0 MB | — | 1 | 2018 Серия 2. Естественные и технические науки №2(19) том 16. |
 | 42 | ⚠️ CHECK | 0.0 MB | — | 1 | 2017 Серия 1. Гуманитарные и общественные науки №1(17) том 13. |
 | 43 | ⚠️ CHECK | 0.0 MB | — | 1 | 2017 Серия 1. Гуманитарные и общественные науки №2(18), том 15. |
-| 44 | ⚠️ CHECK | 0.0 MB | — | 2 | 2017 Серия 1. Гуманитарные и общественные науки №3(19) том 16.; 2017 Серия 1. Гуманитарные и общественные науки № 4(20) том 17. |
+| 44 | ✅ OK | 4.41 MB | 294 | 2 | 2017 Серия 1. Гуманитарные и общественные науки №3(19) том 16.; 2017 Серия 1. Гуманитарные и общественные науки № 4(20) том 17. |
 | 45 | ⚠️ CHECK | 0.0 MB | — | 1 | 2017 Серия 2. Естественные и технические науки № 1(17) том 14. |
 
 ## Требуют ручной проверки
 
-- **https://chspu.ru/wp-content/uploads/2026/07/Журнал-Известия-Чеченского-государственного-педагогического-университета-Серия-2.-Вопросы-философии-и-психологии-№1-1-2026_compressed.pdf** — URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1000)>
-- **https://chspu.ru/wp-content/uploads/2026/07/Известия-Чеченского-государственного-педагогического-университета.-Серия-1-гуманитарные-и-общественные-науки.-2026.-№-2-54_compressed.pdf** — URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1000)>
-- **https://chspu.ru/wp-content/uploads/2026/04/Известия-Чеченского-государственного-педагогического-университета.-Серия-1-гуманитарные-и-общественные-науки.-2026.-№-1-53.pdf** — URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1000)>
-- **https://chspu.ru/wp-content/uploads/2026/04/Известия-Чеченского-государственного-педагогического-университета.-Серия-1-гуманитарные-и-общественные-науки.-2025.-№-4-52.pdf** — URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1000)>
-- **https://chspu.ru/wp-content/uploads/2025/10/Известия-Чеченского-государственного-педагогического-университета.-Серия-1-гуманитарные-и-общественные-науки.-2025.-№-3-51-1.pdf** — URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1000)>
-- **https://chspu.ru/wp-content/uploads/2025/08/ИЗВЕСТИЯ-ЧЕЧЕНСКОГО-ГОСУДАРСТВЕННОГО-ПЕДАГОГИЧЕСКОГО-УНИВЕРСИТЕТА-Серия-1.-Гуманитарные-и-обще-ственные-науки-№2-50-2025.pdf** — URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1000)>
-- **https://chspu.ru/wp-content/uploads/2025/04/ИЗВЕСТИЯ-ЧЕЧЕНСКОГО-ГОСУДАРСТВЕННОГО-ПЕДАГОГИЧЕСКОГО-УНИВЕРСИТЕТА-Серия-1.-Гуманитарные-и-общественные-науки-№1-49-2025.pdf** — URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1000)>
-- **https://chspu.ru/wp-content/uploads/2024/12/Журнал-Известия-Чеченского-государственного-педагогического-университета-Серия-1.-Гуманитарные-и-общественные-науки-№4-48-2024_compressed.pdf** — URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1000)>
-- **https://chspu.ru/wp-content/uploads/2024/12/Журнал-Известия-Чеченского-государственного-педагогического-университета-Серия-1.-Гуманитарные-и-общественные-науки-№3-47-2024_compressed.pdf** — URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1000)>
-- **https://chspu.ru/wp-content/uploads/2024/09/Журнал-Известия-Чеченского-государственного-педагогического-университета-Серия-1.-Гуманитарные-и-общественные-науки-№2-46-2024.pdf** — URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1000)>
-- **https://chspu.ru/wp-content/uploads/2024/06/Журнал-Известия-Чеченского-государственного-педагогического-университета-Серия-1.-№1-45-2024-г..pdf** — URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1000)>
-- **https://chspu.ru/wp-content/uploads/2024/05/Журнал-Известия-Чеченского-государственного-педагогического-университета-Серия-2.-Психологические-и-философские-науки-№1-1-2024_compressed.pdf** — URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1000)>
-- **https://chspu.ru/wp-content/uploads/2024/09/Журнал-Известия-Чеченского-государственного-педагогического-университета-Серия-2.-Психологические-и-философские-науки-№2-2-2024.pdf** — URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1000)>
-- **https://chspu.ru/wp-content/uploads/2025/08/ИЗВЕСТИЯ-ЧЕЧЕНСКОГО-ГОСУДАРСТВЕННОГО-ПЕДАГОГИЧЕСКОГО-УНИВЕРСИТЕТА-Серия-2.-Психологические-и-философские-науки-№3-3-2024.pdf** — URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1000)>
-- **https://chspu.ru/wp-content/uploads/2024/02/ИЗВЕСТИЯ-ЧЕЧЕНСКОГО-ГОСУДАРСТВЕННОГО-ПЕДАГОГИЧЕСКОГО-УНИВЕРСИТЕТА-Серия-1.-Гуманитарные-и-общественные-науки-№4-44-2023_compressed.pdf** — URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1000)>
-- **https://chspu.ru/wp-content/uploads/2024/02/ИЗВЕСТИЯ-ЧЕЧЕНСКОГО-ГОСУДАРСТВЕННОГО-ПЕДАГОГИЧЕСКОГО-УНИВЕРСИТЕТА-Серия-1.-Гуманитарные-и-общественные-науки-№3-43-2023_compressed.pdf** — URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1000)>
-- **https://chspu.ru/wp-content/uploads/2023/10/ИЗВЕСТИЯ-ЧЕЧЕНСКОГО-ГОСУДАРСТВЕННОГО-ПЕДАГОГИЧЕСКОГО-УНИВЕРСИТЕТА-Серия-1.-Гуманитарные-и-общественные-науки-№2-42-2023.pdf** — URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1000)>
-- **https://chspu.ru/wp-content/uploads/2025/07/Известия-Чеченского-государственного-педагогического-университета-Серия-1.-Гуманитарные-и-общественные-науки-№1-41-2023-1.pdf** — URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1000)>
-- **https://chspu.ru/wp-content/uploads/2023/02/ИЗВЕСТИЯ-ЧЕЧЕНСКОГО-ГОСУДАРСТВЕННОГО-ПЕДАГОГИЧЕСКОГО-УНИВЕРСИТЕТА-Серия-1.-Гуманитарные-и-общественные-науки-№4-40-2022.pdf** — URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1000)>
-- **https://chspu.ru/wp-content/uploads/2023/01/ИЗВЕСТИЯ-ЧЕЧЕНСКОГО-ГОСУДАРСТВЕННОГО-ПЕДАГОГИЧЕСКОГО-УНИВЕРСИТЕТА-Серия-1.-Гуманитарные-и-общественные-науки-№3-39-2022.pdf** — URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1000)>
-- **https://chspu.ru/wp-content/uploads/2022/11/Известия-Чеченского-государственного-педагогического-университета-Серия-1.-Гуманитарные-и-общественные-науки-№2-38-2022.pdf** — URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1000)>
-- **https://chspu.ru/wp-content/uploads/2022/08/ИЗВЕСТИЯ-ЧЕЧЕНСКОГО-ГОСУДАРСТВЕННОГО-ПЕДАГОГИЧЕСКОГО-УНИВЕРСИТЕТА-Серия-1.-Гуманитарные-и-общественные-науки-№1-37-2022.pdf** — URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1000)>
-- **https://chspu.ru/wp-content/uploads/2025/07/ИЗВЕСТИЯ-ЧЕЧЕНСКОГО-ГОСУДАРСТВЕННОГО-ПЕДАГОГИЧЕСКОГО-УНИВЕРСИТЕТА-Серия-1.-Гуманитарные-и-общественные-науки-№4-36-2021-1.pdf** — URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1000)>
-- **https://chspu.ru/wp-content/uploads/2025/07/ИЗВЕСТИЯ-ЧЕЧЕНСКОГО-ГОСУДАРСТВЕННОГО-ПЕДАГОГИЧЕСКОГО-УНИВЕРСИТЕТА-Серия-1.-Гуманитарные-и-общественные-науки-№3-35-2021-1.pdf** — URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1000)>
-- **https://chspu.ru/wp-content/uploads/2021/08/Известия-Чеченского-государственного-педагогического-университета-2021-г.-Серия-2.-Гуманитарные-и-общественные-науки.pdf** — URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1000)>
-- **https://chspu.ru/wp-content/uploads/2021/08/Известия-Чеченского-государственного-педагогического-университета-2021-г.-Серия-1.-Гуманитарные-и-общественные-науки.pdf** — URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1000)>
-- **https://chspu.ru/wp-content/uploads/2021/08/Известия-Чеченского-государственного-педагогического-университета-2021-г.-Серия-2.-Естественные-и-технические-науки.pdf** — URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1000)>
-- **https://chspu.ru/wp-content/uploads/2022/03/ИЗВЕСТИЯ-ЧЕЧЕНСКОГО-ГОСУДАРСТВЕННОГО-ПЕДАГОГИЧЕСКОГО-УНИВЕРСИТЕТА-Серия-2.-Естественные-и-технические-науки-№2-25-2021.pdf** — URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1000)>
-- **https://chspu.ru/wp-content/uploads/2020/07/gum.-2-30-2020-a..pdf** — URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1000)>
-- **https://chspu.ru/wp-content/uploads/2021/01/Izvestija-Chechenskogo-gosudarstvennogo-pedagogicheskogo-universiteta-2020-g.-Serija-1-Gumanitarnye-i-obshhestvennye-nauki-432.pdf** — URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1000)>
-- **https://chspu.ru/wp-content/uploads/2021/01/Izvestija-Chechenskogo-gosudarstvennogo-pedagogicheskogo-universiteta-Serija-2.-Estestvennye-i-tehnicheskie-nauki-2-23.pdf** — URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1000)>
-- **https://chspu.ru/wp-content/uploads/2021/01/Izvestija-Chechenskogo-gosudarstvennogo-pedagogicheskogo-universiteta-2020-g.-Serija-1-Gumanitarnye-i-obshhestvennye-nauki-3-31.pdf** — URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1000)>
-- **https://chspu.ru/wp-content/uploads/2020/07/est.-№1-22-2020-a.pdf** — URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1000)>
-- **https://chspu.ru/wp-content/uploads/2020/07/izvestiya-chgpu-gum-2018-121-tom-18.pdf** — URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1000)>
-- **https://chspu.ru/wp-content/uploads/2020/07/gum-№226-2019-tom-24.pdf** — URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1000)>
-- **https://chspu.ru/wp-content/uploads/2020/07/gum-№327-2019-tom25-maket-3-ot-16.09.19-dlya-izvestij-1.pdf** — URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1000)>
-- **https://chspu.ru/wp-content/uploads/2020/07/gum.-№42019.pdf** — URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1000)>
-- **https://chspu.ru/wp-content/uploads/2020/07/est-№120-2019-el.var.pdf** — URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1000)>
-- **https://chspu.ru/wp-content/uploads/2020/07/est.-№22019.pdf** — URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1000)>
-- **https://chspu.ru/wp-content/uploads/2020/07/izvestiya-est-№118.pdf** — URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1000)>
-- **https://chspu.ru/wp-content/uploads/2020/07/izvestiya-est-№219-tom-16-2018.pdf** — URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1000)>
-- **https://chspu.ru/wp-content/uploads/2020/07/izvestiya-chgpu.-seriya-1.-gum.-i-obshh.-№117-tom-13.pdf** — URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1000)>
-- **https://chspu.ru/wp-content/uploads/2020/07/gum-izvestiya-№218-tom-15-2017.pdf** — URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1000)>
-- **https://chspu.ru/wp-content/uploads/2020/07/izvestiya-319-tom-16.pdf** — URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1000)>
-- **https://chspu.ru/wp-content/uploads/2020/07/izvestiya-est-№17.pdf** — URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1000)>
+- **https://chspu.ru/wp-content/uploads/2020/07/gum.-2-30-2020-a..pdf** — HTTPError 404: Not Found
+- **https://chspu.ru/wp-content/uploads/2020/07/est.-№1-22-2020-a.pdf** — HTTPError 404: Not Found
+- **https://chspu.ru/wp-content/uploads/2020/07/gum-№226-2019-tom-24.pdf** — HTTPError 404: Not Found
+- **https://chspu.ru/wp-content/uploads/2020/07/gum-№327-2019-tom25-maket-3-ot-16.09.19-dlya-izvestij-1.pdf** — HTTPError 404: Not Found
+- **https://chspu.ru/wp-content/uploads/2020/07/gum.-№42019.pdf** — HTTPError 404: Not Found
+- **https://chspu.ru/wp-content/uploads/2020/07/est-№120-2019-el.var.pdf** — HTTPError 404: Not Found
+- **https://chspu.ru/wp-content/uploads/2020/07/est.-№22019.pdf** — HTTPError 404: Not Found
+- **https://chspu.ru/wp-content/uploads/2020/07/izvestiya-est-№118.pdf** — HTTPError 404: Not Found
+- **https://chspu.ru/wp-content/uploads/2020/07/izvestiya-est-№219-tom-16-2018.pdf** — HTTPError 404: Not Found
+- **https://chspu.ru/wp-content/uploads/2020/07/izvestiya-chgpu.-seriya-1.-gum.-i-obshh.-№117-tom-13.pdf** — HTTPError 404: Not Found
+- **https://chspu.ru/wp-content/uploads/2020/07/gum-izvestiya-№218-tom-15-2017.pdf** — HTTPError 404: Not Found
+- **https://chspu.ru/wp-content/uploads/2020/07/izvestiya-est-№17.pdf** — HTTPError 404: Not Found
 
 ## Дубли ссылок
 

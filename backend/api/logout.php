@@ -2,6 +2,7 @@
 declare(strict_types=1);
 require __DIR__.'/../bootstrap.php';
 require_method('POST');
+require_csrf();
 start_editor_session();
 $_SESSION=[];
 if(ini_get('session.use_cookies')){

@@ -73,5 +73,6 @@ try{
   ],201);
 }catch(Throwable $e){
   if($pdo->inTransaction())$pdo->rollBack();
-  json_response(['error'=>'Не удалось сохранить рукопись','detail'=>$e->getMessage()],500);
+  record_system_error('error','Submission failed',['error'=>$e->getMessage()]);
+  json_response(['error'=>'Не удалось сохранить рукопись. Повторите позже.'],500);
 }

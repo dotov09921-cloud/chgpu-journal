@@ -26,4 +26,4 @@ document.getElementById('issueForm').addEventListener('submit',async e=>{
  try{await editorCreateIssue(Object.fromEntries(fd.entries()));m.textContent='Выпуск создан.';e.currentTarget.reset();await loadIssues()}catch(err){m.textContent=err.message}
 });
 loadIssues();
-</script></body></html>
+</script><script src="session-tools.js"></script></body></html>

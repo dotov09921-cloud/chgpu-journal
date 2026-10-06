@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 require __DIR__.'/../bootstrap.php';
-$user=require_editor();
+$user=require_roles(['admin','editor']);
 
 if($_SERVER['REQUEST_METHOD']==='GET'){
   $status=trim((string)($_GET['status']??''));

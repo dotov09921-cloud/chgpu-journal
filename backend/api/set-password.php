@@ -2,6 +2,7 @@
 declare(strict_types=1);
 require __DIR__.'/../bootstrap.php';
 require_method('POST');
+require_csrf();
 
 $body=json_decode(file_get_contents('php://input'),true)?:[];
 $email=trim((string)($body['email']??''));

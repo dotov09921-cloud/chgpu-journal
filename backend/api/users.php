@@ -10,6 +10,7 @@ if($_SERVER['REQUEST_METHOD']==='GET'){
 }
 
 require_method('POST');
+require_csrf();
 $body=json_decode(file_get_contents('php://input'),true)?:[];
 $action=(string)($body['action']??'');
 

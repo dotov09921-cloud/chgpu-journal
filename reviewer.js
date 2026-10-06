@@ -9,5 +9,5 @@ document.addEventListener('DOMContentLoaded',async()=>{
      const result=card.querySelector('.resultMsg');
      try{await reviewerSubmit({assignment_id:Number(card.dataset.id),recommendation:card.querySelector('.recommendation').value,comment:card.querySelector('.reviewComment').value.trim()});result.textContent='Заключение отправлено.';card.querySelector('.sendReview').disabled=true}catch(e){result.textContent=e.message}
    }));
- }catch(e){location.href='login.html'}
+ }catch(e){if(chgpuHandleAccessError(e,document.body))return;throw e}
 });

@@ -1,0 +1,49 @@
+name: Docker smoke test
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "Dockerfile"
+      - "docker-compose.yml"
+      - "docker/**"
+      - "backend/**"
+      - ".github/workflows/docker-smoke.yml"
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate compose
+        run: docker compose config
+
+      - name: Build and start
+        run: docker compose up -d --build
+
+      - name: Wait for web
+        run: |
+          for i in $(seq 1 60); do
+            if curl -fsS http://localhost:8080/backend/health.php; then
+              exit 0
+            fi
+            sleep 5
+          done
+          docker compose ps
+          docker compose logs web
+          docker compose logs db
+          exit 1
+
+      - name: Check seeded users
+        run: |
+          docker compose exec -T db mariadb -uchgpu -pchgpu_dev_password chgpu_journal -e "SELECT email,role,is_active FROM users ORDER BY id;"
+
+      - name: Show services
+        run: docker compose ps
+
+      - name: Stop
+        if: always()
+        run: docker compose down -v

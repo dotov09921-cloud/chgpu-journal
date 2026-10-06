@@ -143,3 +143,16 @@ async function setInvitedPassword(email,token,password) {
     body:JSON.stringify({email,token,password})
   });
 }
+
+async function adminSystemStatus() {
+  return chgpuApi('/system-status.php');
+}
+async function adminIntegrityCheck() {
+  return chgpuApi('/integrity.php');
+}
+async function adminBackupNow() {
+  return chgpuApi('/backup-now.php', { method:'POST' });
+}
+function adminExportUrl() {
+  return window.CHGPU_API.base + '/export-data.php';
+}

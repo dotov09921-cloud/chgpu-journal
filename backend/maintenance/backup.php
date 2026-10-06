@@ -16,6 +16,7 @@ function create_backup(?array $actor=null): array {
   $stamp=date('Ymd-His');
   $dbFile=$backupDir.'/db-'.$stamp.'.sql';
   $uploadsFile=$backupDir.'/uploads-'.$stamp.'.tar.gz';
+  $archiveFile=$backupDir.'/archive-'.$stamp.'.tar.gz';
   $manifestFile=$backupDir.'/manifest-'.$stamp.'.json';
 
   $db=$config['db'];
@@ -47,6 +48,16 @@ function create_backup(?array $actor=null): array {
     if(!$uploadsOk)@unlink($uploadsFile);
   }
 
+  $archiveOk=false;
+  $archiveDir=$config['app']['archive_dir']??null;
+  if($archiveDir&&is_dir($archiveDir)){
+    $parent=dirname($archiveDir);$name=basename($archiveDir);
+    $tar=sprintf('tar -czf %s -C %s %s',escapeshellarg($archiveFile),escapeshellarg($parent),escapeshellarg($name));
+    exec($tar,$o3,$c3);
+    $archiveOk=$c3===0&&is_file($archiveFile)&&filesize($archiveFile)>0;
+    if(!$archiveOk)@unlink($archiveFile);
+  }
+
   $manifest=[
     'created_at'=>date(DATE_ATOM),
     'database'=>[
@@ -58,6 +69,11 @@ function create_backup(?array $actor=null): array {
       'file'=>basename($uploadsFile),
       'size_bytes'=>filesize($uploadsFile),
       'sha256'=>hash_file('sha256',$uploadsFile)
+    ]:null,
+    'archive'=>$archiveOk?[
+      'file'=>basename($archiveFile),
+      'size_bytes'=>filesize($archiveFile),
+      'sha256'=>hash_file('sha256',$archiveFile)
     ]:null
   ];
   file_put_contents($manifestFile,json_encode($manifest,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT),LOCK_EX);

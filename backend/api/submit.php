@@ -51,11 +51,21 @@ try{
   $hist->execute([$submissionId,'submitted','new','Рукопись поступила в редакцию']);
   $pdo->commit();
 
+  $trackingUrl=rtrim($config['app']['base_url'],'/').'/track.html?id='.urlencode($publicId).'&token='.urlencode($trackingToken);
+  $authorBody='<p>Здравствуйте, '.mail_escape(trim($_POST['author_name'])).'.</p><p>Ваша рукопись <strong>'.mail_escape(trim($_POST['title'])).'</strong> зарегистрирована под номером <strong>'.$publicId.'</strong>.</p>'.mail_button($trackingUrl,'Отслеживать статус');
+  send_notification($submissionId,'submission_received_author',trim($_POST['author_email']),'Рукопись '.$publicId.' принята системой',mail_layout('Рукопись зарегистрирована',$authorBody));
+
+  $editorEmail=(string)($config['mail']['editor_email']??'');
+  if($editorEmail!==''){
+    $editorBody='<p>Поступила новая рукопись <strong>'.$publicId.'</strong>.</p><p><strong>'.mail_escape(trim($_POST['title'])).'</strong><br>Автор: '.mail_escape(trim($_POST['author_name'])).'</p>';
+    send_notification($submissionId,'submission_received_editor',$editorEmail,'Новая рукопись '.$publicId,mail_layout('Новая рукопись',$editorBody));
+  }
+
   json_response([
     'ok'=>true,
     'public_id'=>$publicId,
     'tracking_token'=>$trackingToken,
-    'tracking_url'=>rtrim($config['app']['base_url'],'/').'/track.html?id='.urlencode($publicId).'&token='.urlencode($trackingToken)
+    'tracking_url'=>$trackingUrl
   ],201);
 }catch(Throwable $e){
   if($pdo->inTransaction())$pdo->rollBack();

@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 require __DIR__.'/../bootstrap.php';
-$user=require_editor();
+require_editor();
 $pdo=db();
 
 if($_SERVER['REQUEST_METHOD']==='GET'){
-  $stmt=$pdo->query("SELECT i.*,COUNT(a.id) AS article_count FROM issues i LEFT JOIN published_articles a ON a.issue_id=i.id AND a.is_visible=1 GROUP BY i.id ORDER BY i.year DESC,i.id DESC");
+  $stmt=$pdo->query("SELECT i.id,i.year,i.series,i.number,i.title,i.publication_date,i.is_published,COUNT(a.id) AS article_count FROM issues i LEFT JOIN published_articles a ON a.issue_id=i.id AND a.is_visible=1 GROUP BY i.id ORDER BY i.year DESC,i.id DESC");
   json_response(['items'=>$stmt->fetchAll()]);
 }
 

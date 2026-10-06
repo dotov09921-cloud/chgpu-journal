@@ -3,3 +3,6 @@ backend/storage/uploads/*
 !backend/storage/uploads/.gitkeep
 *.log
 .DS_Store
+backend/storage/backups/*
+!backend/storage/backups/.gitkeep
+backend/storage/system.log

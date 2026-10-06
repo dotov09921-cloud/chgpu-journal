@@ -26,3 +26,9 @@ function clean_filename(string $name): string {$name=preg_replace('/[^\pL\pN._ -
 function public_id(PDO $pdo): string {$year=date('Y');$stmt=$pdo->prepare("SELECT MAX(CAST(SUBSTRING_INDEX(public_id,'-',-1) AS UNSIGNED)) AS n FROM submissions WHERE public_id LIKE ?");$stmt->execute(["CHGPU-{$year}-%"]);$next=((int)($stmt->fetch()['n']??0))+1;return sprintf('CHGPU-%s-%04d',$year,$next);}
 function start_editor_session(): void {global $config;if(session_status()===PHP_SESSION_NONE){session_name($config['app']['session_name']);session_set_cookie_params(['httponly'=>true,'secure'=>(!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off'),'samesite'=>'Lax']);session_start();}}
 function require_editor(): array {start_editor_session();if(empty($_SESSION['user_id']))json_response(['error'=>'Unauthorized'],401);$stmt=db()->prepare('SELECT id,email,full_name,role,is_active FROM users WHERE id=? LIMIT 1');$stmt->execute([$_SESSION['user_id']]);$user=$stmt->fetch();if(!$user||!$user['is_active'])json_response(['error'=>'Unauthorized'],401);return $user;}
+
+function require_roles(array $roles): array {
+  $user=require_editor();
+  if(!in_array($user['role'],$roles,true))json_response(['error'=>'Forbidden'],403);
+  return $user;
+}

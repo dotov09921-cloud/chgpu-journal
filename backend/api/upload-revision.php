@@ -83,5 +83,6 @@ try{
   json_response(['ok'=>true,'version'=>$version,'status'=>'screening'],201);
 }catch(Throwable $e){
   if($pdo->inTransaction())$pdo->rollBack();
-  json_response(['error'=>$e->getMessage()],500);
+  record_system_error('error','Revision upload failed',['error'=>$e->getMessage()]);
+  json_response(['error'=>'Не удалось загрузить новую версию. Повторите позже.'],500);
 }

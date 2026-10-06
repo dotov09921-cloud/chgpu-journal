@@ -5,8 +5,11 @@ CREATE TABLE IF NOT EXISTS users (
   full_name VARCHAR(190) NOT NULL,
   role ENUM('admin','editor','reviewer') NOT NULL DEFAULT 'editor',
   is_active TINYINT(1) NOT NULL DEFAULT 1,
-  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  UNIQUE KEY uq_issue_identity (year, series(120), number)
+  must_set_password TINYINT(1) NOT NULL DEFAULT 0,
+  activation_token_hash CHAR(64) NULL,
+  activation_expires_at DATETIME NULL,
+  last_login_at DATETIME NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS issues (
@@ -18,7 +21,8 @@ CREATE TABLE IF NOT EXISTS issues (
   publication_date DATE NULL,
   pdf_path VARCHAR(500) NULL,
   is_published TINYINT(1) NOT NULL DEFAULT 0,
-  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY uq_issue_identity (year, series(120), number)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS submissions (
@@ -131,4 +135,20 @@ CREATE TABLE IF NOT EXISTS notification_log (
   INDEX idx_notification_submission (submission_id),
   INDEX idx_notification_status (status),
   CONSTRAINT fk_notification_submission FOREIGN KEY (submission_id) REFERENCES submissions(id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+CREATE TABLE IF NOT EXISTS system_audit_log (
+  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  actor_user_id BIGINT UNSIGNED NULL,
+  event_type VARCHAR(64) NOT NULL,
+  entity_type VARCHAR(64) NOT NULL,
+  entity_id BIGINT UNSIGNED NULL,
+  details_json LONGTEXT NULL,
+  ip_address VARCHAR(64) NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_audit_actor (actor_user_id),
+  INDEX idx_audit_entity (entity_type, entity_id),
+  INDEX idx_audit_created (created_at),
+  CONSTRAINT fk_audit_actor FOREIGN KEY (actor_user_id) REFERENCES users(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

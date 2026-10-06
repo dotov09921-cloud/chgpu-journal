@@ -1,0 +1,24 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Вход в редакцию — Известия ЧГПУ</title><link rel="stylesheet" href="styles.css"></head><body>
+<div class="topline"><div class="wrap"><span>Чеченский государственный педагогический университет</span><span>Служебный раздел</span></div></div>
+<section class="page-hero"><div class="wrap"><div class="crumb">Редакция</div><h1>Вход в редакционную систему</h1><p class="lead">Доступ только для сотрудников редакции.</p></div></section>
+<section class="section"><div class="wrap narrow"><form id="loginForm" class="form-card">
+<div id="loginError" class="notice" style="display:none"></div>
+<div class="form-group"><label>E-mail</label><input name="email" type="email" required autocomplete="username"></div>
+<div class="form-group"><label>Пароль</label><input name="password" type="password" required autocomplete="current-password"></div>
+<button class="btn accent" type="submit">Войти</button>
+<p class="note" style="margin-top:16px">На GitHub Pages вход работает как демонстрация. После размещения на Beget включится настоящая авторизация.</p>
+</form></div></section>
+<script src="api.js"></script><script>
+document.getElementById('loginForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const box=document.getElementById('loginError');
+  if(!window.CHGPU_API.enabled){ location.href='editor.html'; return; }
+  const fd=new FormData(e.currentTarget);
+  try{
+    await editorLogin(fd.get('email'),fd.get('password'));
+    location.href='editor.html';
+  }catch(err){
+    box.style.display='block'; box.textContent=err.message;
+  }
+});
+</script></body></html>

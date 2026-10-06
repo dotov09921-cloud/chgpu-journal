@@ -55,7 +55,12 @@ try{
       ->execute([$submissionId,$user['id'],'published',$sub['status'],'published','Статья опубликована в выпуске']);
 
   $pdo->commit();
-  json_response(['ok'=>true,'article_id'=>$articleId,'slug'=>$slug,'public_url'=>rtrim($config['app']['base_url'],'/').'/published.html?slug='.urlencode($slug)]);
+
+  $publicUrl=rtrim($config['app']['base_url'],'/').'/published.html?slug='.urlencode($slug);
+  $body='<p>Ваша статья <strong>'.mail_escape($sub['title']).'</strong> опубликована в журнале «Известия ЧГПУ».</p>'.mail_button($publicUrl,'Открыть публикацию');
+  send_notification($submissionId,'article_published_author',$sub['author_email'],'Статья '.$sub['public_id'].' опубликована',mail_layout('Статья опубликована',$body));
+
+  json_response(['ok'=>true,'article_id'=>$articleId,'slug'=>$slug,'public_url'=>$publicUrl]);
 }catch(Throwable $e){
   if($pdo->inTransaction())$pdo->rollBack();
   json_response(['error'=>$e->getMessage()],500);

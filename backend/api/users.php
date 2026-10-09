@@ -22,19 +22,29 @@ if($action==='invite'){
     json_response(['error'=>'Некорректные данные пользователя'],422);
   }
 
+  $existing=$pdo->prepare('SELECT id FROM users WHERE email=? LIMIT 1');
+  $existing->execute([$email]);
+  if($existing->fetch()){
+    json_response(['error'=>'Пользователь с таким e-mail уже существует'],409);
+  }
+
   $token=random_token(32);
   $hash=hash('sha256',$token);
   $placeholder=password_hash(random_token(24),PASSWORD_DEFAULT);
 
   $stmt=$pdo->prepare("INSERT INTO users (email,password_hash,full_name,`role`,is_active,must_set_password,activation_token_hash,activation_expires_at)
-    VALUES (?,?,?,?,1,1,?,DATE_ADD(NOW(),INTERVAL 72 HOUR))
-    ON DUPLICATE KEY UPDATE full_name=VALUES(full_name),`role`=VALUES(`role`),is_active=1,must_set_password=1,activation_token_hash=VALUES(activation_token_hash),activation_expires_at=VALUES(activation_expires_at)");
-  $stmt->execute([$email,$placeholder,$name,$role,$hash]);
+    VALUES (?,?,?,?,1,1,?,DATE_ADD(NOW(),INTERVAL 72 HOUR))");
+  try{
+    $stmt->execute([$email,$placeholder,$name,$role,$hash]);
+  }catch(PDOException $e){
+    // A concurrent invitation can insert the email after the existence check.
+    if((int)($e->errorInfo[1]??0)===1062){
+      json_response(['error'=>'Пользователь с таким e-mail уже существует'],409);
+    }
+    throw $e;
+  }
 
   $id=(int)$pdo->lastInsertId();
-  if($id===0){
-    $q=$pdo->prepare('SELECT id FROM users WHERE email=? LIMIT 1');$q->execute([$email]);$id=(int)$q->fetch()['id'];
-  }
 
   $invite=rtrim($config['app']['base_url'],'/').'/set-password.html?token='.urlencode($token).'&email='.urlencode($email);
   $bodyHtml='<p>Вам предоставлен доступ к редакционной системе «Известия ЧГПУ».</p><p>Роль: <strong>'.mail_escape($role).'</strong>.</p>'.mail_button($invite,'Установить пароль');

@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS users (
   email VARCHAR(190) NOT NULL UNIQUE,
   password_hash VARCHAR(255) NOT NULL,
   full_name VARCHAR(190) NOT NULL,
-  role ENUM('admin','editor','reviewer') NOT NULL DEFAULT 'editor',
+  `role` ENUM('admin','editor','reviewer') NOT NULL DEFAULT 'editor',
   is_active TINYINT(1) NOT NULL DEFAULT 1,
   must_set_password TINYINT(1) NOT NULL DEFAULT 0,
   activation_token_hash CHAR(64) NULL,
@@ -131,7 +131,6 @@ CREATE TABLE IF NOT EXISTS review_assignments (
   CONSTRAINT fk_review_assigner FOREIGN KEY (assigned_by_user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-
 CREATE TABLE IF NOT EXISTS notification_log (
   id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   submission_id BIGINT UNSIGNED NULL,
@@ -145,7 +144,6 @@ CREATE TABLE IF NOT EXISTS notification_log (
   INDEX idx_notification_status (status),
   CONSTRAINT fk_notification_submission FOREIGN KEY (submission_id) REFERENCES submissions(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
 
 CREATE TABLE IF NOT EXISTS system_audit_log (
   id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -162,7 +160,6 @@ CREATE TABLE IF NOT EXISTS system_audit_log (
   CONSTRAINT fk_audit_actor FOREIGN KEY (actor_user_id) REFERENCES users(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-
 CREATE TABLE IF NOT EXISTS system_errors (
   id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   level VARCHAR(32) NOT NULL,
@@ -173,7 +170,6 @@ CREATE TABLE IF NOT EXISTS system_errors (
   INDEX idx_system_errors_created (created_at),
   INDEX idx_system_errors_level (level)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
 
 CREATE TABLE IF NOT EXISTS security_rate_limits (
   action_key VARCHAR(64) NOT NULL,

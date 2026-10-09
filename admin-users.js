@@ -10,11 +10,40 @@ document.addEventListener('DOMContentLoaded',async()=>{
    }catch(e){if(chgpuHandleAccessError(e,document.body))return;throw e}
  }
  form.addEventListener('submit',async e=>{
-   e.preventDefault();msg.style.display='block';
+   e.preventDefault();msg.style.display='block';msg.replaceChildren();
    if(!window.CHGPU_API.enabled){msg.textContent='Демо: приглашение не отправляется.';return;}
    try{
      const r=await adminInviteUser(Object.fromEntries(new FormData(form).entries()));
-     msg.innerHTML='<strong>Приглашение создано.</strong><br><span class="note">Ссылка действует 72 часа.</span>';
+     const title=document.createElement('strong');
+     title.textContent='Приглашение создано.';
+     const note=document.createElement('span');
+     note.className='note';
+     note.textContent='Ссылка действует 72 часа.';
+     msg.replaceChildren(title,document.createElement('br'),note);
+     if(r.mail_enabled===false){
+       const mailNote=document.createElement('p');
+       mailNote.textContent='Отправка почты отключена. Передайте ссылку пользователю вручную.';
+       msg.append(mailNote);
+     }
+     if(typeof r.invite_url==='string'&&r.invite_url.trim()){
+       try{
+         const url=new URL(r.invite_url,window.location.href);
+         if(!['http:','https:'].includes(url.protocol)||url.username||url.password)throw new Error('Unsafe invite URL');
+         const link=document.createElement('a');
+         link.href=url.href;
+         link.textContent=r.invite_url;
+         link.target='_blank';
+         link.rel='noopener noreferrer';
+         link.style.overflowWrap='anywhere';
+         const line=document.createElement('p');
+         line.append(link);
+         msg.append(line);
+       }catch{
+         const warning=document.createElement('p');
+         warning.textContent='Ссылка приглашения имеет недопустимый формат.';
+         msg.append(warning);
+       }
+     }
      form.reset();await load();
    }catch(err){msg.textContent=err.message}
  });

@@ -165,6 +165,13 @@ async function adminInviteUser(payload) {
     body:JSON.stringify({action:'invite',...payload})
   });
 }
+async function adminReinviteUser(id) {
+  return chgpuApi('/users.php', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({action:'reinvite',id})
+  });
+}
 async function adminUpdateUser(payload) {
   return chgpuApi('/users.php', {
     method:'POST',

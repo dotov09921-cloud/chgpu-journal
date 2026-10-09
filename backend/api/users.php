@@ -53,6 +53,24 @@ if($action==='invite'){
   json_response(['ok'=>true,'id'=>$id,'invite_url'=>$invite],201);
 }
 
+if($action==='reinvite'){
+  $id=filter_var($body['id']??null,FILTER_VALIDATE_INT,['options'=>['min_range'=>1]]);
+  if($id===false||$id===null)json_response(['error'=>'Некорректный id пользователя'],422);
+  $stmt=$pdo->prepare('SELECT id,email FROM users WHERE id=? LIMIT 1');
+  $stmt->execute([$id]);
+  $target=$stmt->fetch();
+  if(!$target)json_response(['error'=>'Пользователь не найден'],404);
+
+  $token=random_token(32);
+  $hash=hash('sha256',$token);
+  $stmt=$pdo->prepare('UPDATE users SET must_set_password=1,activation_token_hash=?,activation_expires_at=DATE_ADD(NOW(),INTERVAL 72 HOUR) WHERE id=?');
+  $stmt->execute([$hash,$id]);
+  $invite=rtrim($config['app']['base_url'],'/').'/set-password.html?token='.urlencode($token).'&email='.urlencode($target['email']);
+  audit_event((int)$user['id'],'user_reinvited','user',(int)$id);
+  // Return the link independently of mail configuration or delivery.
+  json_response(['ok'=>true,'invite_url'=>$invite]);
+}
+
 if($action==='update'){
   $id=(int)($body['id']??0);
   $role=(string)($body['role']??'');

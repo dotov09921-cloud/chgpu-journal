@@ -14,6 +14,6 @@ $name=trim((string)($body['full_name']??''));
 
 if(!filter_var($email,FILTER_VALIDATE_EMAIL)||strlen($password)<10||$name==='')json_response(['error'=>'Нужны корректный e-mail, ФИО и пароль минимум 10 символов'],422);
 
-$stmt=db()->prepare('INSERT INTO users (email,password_hash,full_name,role) VALUES (?,?,?,?)');
+$stmt=db()->prepare('INSERT INTO users (email,password_hash,full_name,`role`) VALUES (?,?,?,?)');
 $stmt->execute([$email,password_hash($password,PASSWORD_DEFAULT),$name,'admin']);
 json_response(['ok'=>true,'message'=>'Администратор создан. Удалите api/create-editor.php с сервера.'],201);

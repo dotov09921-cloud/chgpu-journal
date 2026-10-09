@@ -18,7 +18,7 @@ rate_limit_check(
   ((int)($sec['login_block_minutes']??15))*60
 );
 
-$stmt=db()->prepare('SELECT id,email,password_hash,full_name,role,is_active FROM users WHERE email=? LIMIT 1');
+$stmt=db()->prepare('SELECT id,email,password_hash,full_name,`role`,is_active FROM users WHERE email=? LIMIT 1');
 $stmt->execute([$email]);$user=$stmt->fetch();
 
 if(!$user||!$user['is_active']||!password_verify($password,$user['password_hash'])){

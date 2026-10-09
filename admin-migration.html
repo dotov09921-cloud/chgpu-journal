@@ -1,0 +1,11 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Перенос архива — Известия ЧГПУ</title><link rel="stylesheet" href="styles.css"></head><body>
+<div class="topline"><div class="wrap"><span>Служебный раздел</span><span>Перенос старого архива</span></div></div>
+<section class="section"><div class="wrap"><div class="dashboard">
+<aside class="side"><div class="logo">ИЗВЕСТИЯ ЧГПУ</div><a href="editor.html">Рукописи</a><a href="admin-users.html">Пользователи</a><a href="audit.html">Журнал действий</a><a href="system.html">Система</a><a class="active" href="admin-migration.html">Перенос архива</a><a href="index.html">← На сайт</a></aside>
+<main class="dash-main"><div class="dash-head"><div><div class="crumb">Администратор</div><h2>Перенос старого архива</h2></div></div>
+<p>Сначала импортируйте метаданные 51 выпуска. Затем нажимайте кнопку следующей партии: один PDF за запрос. Можно закрыть страницу и продолжить позже. Ошибки повторяются после обработки оставшихся ready. Выпуски needs_recovery и duplicate_conflict требуют отдельного восстановления.</p>
+<div class="actions"><button class="btn accent" id="metadataBtn" disabled>Импортировать метаданные</button><button class="btn accent" id="pdfBtn" disabled>Импортировать следующую партию PDF</button><button class="btn ghost" id="refreshBtn" disabled>Обновить статус</button></div>
+<div id="migrationStatus" aria-live="polite"></div>
+<section class="system-section"><h3>Последнее действие</h3><pre id="migrationLog" role="status">Загрузка статуса…</pre></section>
+</main></div></div></section>
+<script src="api.js?v=archive-migration-20261009-1"></script><script src="admin-migration.js?v=20261009-1"></script><script src="session-tools.js?v=archive-migration-20261009-1"></script></body></html>

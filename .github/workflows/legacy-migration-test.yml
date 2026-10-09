@@ -1,0 +1,22 @@
+name: Legacy migration tests
+on:
+  push:
+    branches: [main]
+    paths: ['backend/**', 'migration/import-ready.json', 'tests/legacy-migration.php', '.github/workflows/legacy-migration-test.yml']
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+          MYSQL_DATABASE: journal_test
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s --health-timeout=5s --health-retries=10
+    steps:
+      - uses: actions/checkout@v4
+      - run: php tests/legacy-migration.php

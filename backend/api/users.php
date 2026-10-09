@@ -5,7 +5,7 @@ $user=require_roles(['admin']);
 $pdo=db();
 
 if($_SERVER['REQUEST_METHOD']==='GET'){
-  $stmt=$pdo->query("SELECT id,email,full_name,role,is_active,must_set_password,last_login_at,created_at FROM users ORDER BY full_name");
+  $stmt=$pdo->query("SELECT id,email,full_name,`role`,is_active,must_set_password,last_login_at,created_at FROM users ORDER BY full_name");
   json_response(['items'=>$stmt->fetchAll()]);
 }
 
@@ -26,9 +26,9 @@ if($action==='invite'){
   $hash=hash('sha256',$token);
   $placeholder=password_hash(random_token(24),PASSWORD_DEFAULT);
 
-  $stmt=$pdo->prepare("INSERT INTO users (email,password_hash,full_name,role,is_active,must_set_password,activation_token_hash,activation_expires_at)
+  $stmt=$pdo->prepare("INSERT INTO users (email,password_hash,full_name,`role`,is_active,must_set_password,activation_token_hash,activation_expires_at)
     VALUES (?,?,?,?,1,1,?,DATE_ADD(NOW(),INTERVAL 72 HOUR))
-    ON DUPLICATE KEY UPDATE full_name=VALUES(full_name),role=VALUES(role),is_active=1,must_set_password=1,activation_token_hash=VALUES(activation_token_hash),activation_expires_at=VALUES(activation_expires_at)");
+    ON DUPLICATE KEY UPDATE full_name=VALUES(full_name),`role`=VALUES(`role`),is_active=1,must_set_password=1,activation_token_hash=VALUES(activation_token_hash),activation_expires_at=VALUES(activation_expires_at)");
   $stmt->execute([$email,$placeholder,$name,$role,$hash]);
 
   $id=(int)$pdo->lastInsertId();
@@ -51,7 +51,7 @@ if($action==='update'){
   if($id===(int)$user['id']&&$active===0)json_response(['error'=>'Нельзя заблокировать собственную учётную запись'],409);
 
   $fields=[];$params=[];
-  if($role!==''){$fields[]='role=?';$params[]=$role;}
+  if($role!==''){$fields[]='`role`=?';$params[]=$role;}
   if($active!==null){$fields[]='is_active=?';$params[]=$active;}
   if(!$fields)json_response(['error'=>'Нет изменений'],422);
   $params[]=$id;

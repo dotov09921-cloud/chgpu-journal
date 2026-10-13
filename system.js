@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded',async()=>{
  const box=document.getElementById('systemStatus'),msg=document.getElementById('systemMsg');
- const backupBtn=document.getElementById('backupBtn'),integrityBtn=document.getElementById('integrityBtn'),exportBtn=document.getElementById('exportBtn');
+ const backupBtn=document.getElementById('backupBtn'),integrityBtn=document.getElementById('integrityBtn'),mailTestBtn=document.getElementById('mailTestBtn'),exportBtn=document.getElementById('exportBtn');
  if(!window.CHGPU_API.enabled){box.innerHTML='<div class="notice neutral">Реальная системная диагностика включится после подключения Beget.</div>';return;}
  exportBtn.href=adminExportUrl();
 
@@ -26,5 +26,6 @@ document.addEventListener('DOMContentLoaded',async()=>{
 
  backupBtn.addEventListener('click',async()=>{msg.style.display='block';msg.textContent='Создание резервной копии…';try{const r=await adminBackupNow();msg.textContent='Backup создан: '+r.manifest.created_at;await load()}catch(e){msg.textContent=e.message}});
  integrityBtn.addEventListener('click',async()=>{msg.style.display='block';msg.textContent='Проверка файлов…';try{const r=await adminIntegrityCheck();msg.textContent='Проверено '+r.total+' файлов. Исправны: '+r.ok+'. Отсутствуют: '+r.missing.length+'. Не совпадает SHA-256/размер: '+r.mismatch.length}catch(e){msg.textContent=e.message}});
+ mailTestBtn.addEventListener('click',async()=>{msg.style.display='block';msg.textContent='Отправляем тестовое письмо…';try{const r=await adminTestMail();msg.textContent='Тестовое письмо отправлено на '+r.recipient;await load()}catch(e){msg.textContent=e.message;await load()}});
  load();
 });

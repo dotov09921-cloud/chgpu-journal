@@ -199,6 +199,9 @@ async function adminIntegrityCheck() {
 async function adminBackupNow() {
   return chgpuApi('/backup-now.php', { method:'POST' });
 }
+async function adminTestMail() {
+  return chgpuApi('/test-mail.php', { method:'POST' });
+}
 function adminExportUrl() {
   return window.CHGPU_API.base + '/export-data.php';
 }

@@ -38,6 +38,112 @@ function require_roles(array $roles): array {
 }
 
 
+function smtp_read_response($socket,array $expected): string {
+  $response='';
+  while(($line=fgets($socket,8192))!==false){
+    $response.=$line;
+    if(strlen($line)>=4 && $line[3]!=='-')break;
+  }
+  $code=(int)substr($response,0,3);
+  if(!in_array($code,$expected,true)){
+    throw new RuntimeException('SMTP error '.$code.': '.trim($response));
+  }
+  return $response;
+}
+
+function smtp_command($socket,string $command,array $expected): string {
+  if(fwrite($socket,$command."\r\n")===false){
+    throw new RuntimeException('SMTP write failed');
+  }
+  return smtp_read_response($socket,$expected);
+}
+
+function smtp_send_message(string $to,string $subject,string $html): void {
+  global $config;
+  $mailCfg=$config['mail']??[];
+  $host=trim((string)($mailCfg['smtp_host']??''));
+  $port=(int)($mailCfg['smtp_port']??465);
+  $security=strtolower(trim((string)($mailCfg['smtp_security']??'ssl')));
+  $username=trim((string)($mailCfg['smtp_username']??''));
+  $password=(string)($mailCfg['smtp_password']??'');
+  $fromEmail=trim((string)($mailCfg['from_email']??$username));
+  $fromName=(string)($mailCfg['from_name']??'Известия ЧГПУ');
+
+  if($host===''||$port<1||$username===''||$password===''||!filter_var($fromEmail,FILTER_VALIDATE_EMAIL)){
+    throw new RuntimeException('SMTP is not fully configured');
+  }
+
+  $scheme=$security==='ssl'?'ssl':'tcp';
+  $context=stream_context_create([
+    'ssl'=>[
+      'verify_peer'=>true,
+      'verify_peer_name'=>true,
+      'peer_name'=>$host,
+      'SNI_enabled'=>true
+    ]
+  ]);
+
+  $socket=@stream_socket_client(
+    $scheme.'://'.$host.':'.$port,
+    $errno,
+    $errstr,
+    15,
+    STREAM_CLIENT_CONNECT,
+    $context
+  );
+  if(!$socket){
+    throw new RuntimeException('SMTP connection failed: '.$errstr.' ('.$errno.')');
+  }
+  stream_set_timeout($socket,15);
+
+  try{
+    smtp_read_response($socket,[220]);
+
+    $ehloHost=parse_url((string)($config['app']['base_url']??''),PHP_URL_HOST)?:'localhost';
+    smtp_command($socket,'EHLO '.$ehloHost,[250]);
+
+    if(in_array($security,['tls','starttls'],true)){
+      smtp_command($socket,'STARTTLS',[220]);
+      if(!stream_socket_enable_crypto($socket,true,STREAM_CRYPTO_METHOD_TLS_CLIENT)){
+        throw new RuntimeException('SMTP TLS negotiation failed');
+      }
+      smtp_command($socket,'EHLO '.$ehloHost,[250]);
+    }
+
+    smtp_command($socket,'AUTH LOGIN',[334]);
+    smtp_command($socket,base64_encode($username),[334]);
+    smtp_command($socket,base64_encode($password),[235]);
+
+    smtp_command($socket,'MAIL FROM:<'.$fromEmail.'>',[250]);
+    smtp_command($socket,'RCPT TO:<'.$to.'>',[250,251]);
+    smtp_command($socket,'DATA',[354]);
+
+    $safeFromName=preg_replace('/[\r\n]+/','',$fromName);
+    $safeSubject=preg_replace('/[\r\n]+/','',$subject);
+    $headers=[
+      'Date: '.date(DATE_RFC2822),
+      'From: '.mb_encode_mimeheader($safeFromName,'UTF-8').' <'.$fromEmail.'>',
+      'To: <'.$to.'>',
+      'Reply-To: '.$fromEmail,
+      'Subject: '.mb_encode_mimeheader($safeSubject,'UTF-8'),
+      'MIME-Version: 1.0',
+      'Content-Type: text/html; charset=UTF-8',
+      'Content-Transfer-Encoding: 8bit',
+      'Message-ID: <'.bin2hex(random_bytes(12)).'@'.$ehloHost.'>'
+    ];
+
+    $body=str_replace(["\r\n","\r"],"\n",$html);
+    $body=str_replace("\n","\r\n",$body);
+    $body=preg_replace('/(?m)^\./','..',$body)??$body;
+
+    $payload=implode("\r\n",$headers)."\r\n\r\n".$body."\r\n.";
+    smtp_command($socket,$payload,[250]);
+    @smtp_command($socket,'QUIT',[221]);
+  }finally{
+    fclose($socket);
+  }
+}
+
 function send_notification(?int $submissionId,string $eventType,string $to,string $subject,string $html): bool {
   global $config;
   $mailCfg=$config['mail']??[];
@@ -48,24 +154,37 @@ function send_notification(?int $submissionId,string $eventType,string $to,strin
 
   if($enabled){
     if(!filter_var($to,FILTER_VALIDATE_EMAIL)){
-      $status='failed';$error='Invalid recipient';
+      $status='failed';
+      $error='Invalid recipient';
     }else{
-      $fromEmail=(string)($mailCfg['from_email']??'');
-      $fromName=(string)($mailCfg['from_name']??'Известия ЧГПУ');
-      $safeFrom=preg_replace('/[\r\n]+/','',$fromEmail);
-      $safeName=preg_replace('/[\r\n]+/','',$fromName);
-      $headers=[
-        'MIME-Version: 1.0',
-        'Content-Type: text/html; charset=UTF-8',
-        'From: '.mb_encode_mimeheader($safeName,'UTF-8')." <".$safeFrom.">",
-        'Reply-To: '.$safeFrom
-      ];
       try{
-        $sent=@mail($to,mb_encode_mimeheader($fullSubject,'UTF-8'),$html,implode("\r\n",$headers));
+        $transport=strtolower((string)($mailCfg['transport']??'mail'));
+        if($transport==='smtp'){
+          smtp_send_message($to,$fullSubject,$html);
+          $sent=true;
+        }else{
+          $fromEmail=(string)($mailCfg['from_email']??'');
+          $fromName=(string)($mailCfg['from_name']??'Известия ЧГПУ');
+          $safeFrom=preg_replace('/[\r\n]+/','',$fromEmail);
+          $safeName=preg_replace('/[\r\n]+/','',$fromName);
+          $headers=[
+            'MIME-Version: 1.0',
+            'Content-Type: text/html; charset=UTF-8',
+            'From: '.mb_encode_mimeheader($safeName,'UTF-8')." <".$safeFrom.">",
+            'Reply-To: '.$safeFrom
+          ];
+          $sent=@mail(
+            $to,
+            mb_encode_mimeheader($fullSubject,'UTF-8'),
+            $html,
+            implode("\r\n",$headers)
+          );
+          if(!$sent)$error='mail() returned false';
+        }
         $status=$sent?'sent':'failed';
-        if(!$sent)$error='mail() returned false';
       }catch(Throwable $e){
-        $status='failed';$error=$e->getMessage();
+        $status='failed';
+        $error=$e->getMessage();
       }
     }
   }

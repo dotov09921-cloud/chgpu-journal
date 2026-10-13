@@ -25,6 +25,12 @@ return [
   ],
   'mail'=>[
     'enabled'=>false,
+    'transport'=>'smtp',
+    'smtp_host'=>'smtp.mail.ru',
+    'smtp_port'=>465,
+    'smtp_security'=>'ssl',
+    'smtp_username'=>'journal@example.ru',
+    'smtp_password'=>'CHANGE_ME',
     'from_email'=>'journal@example.ru',
     'from_name'=>'Известия ЧГПУ',
     'editor_email'=>'journal@example.ru',
